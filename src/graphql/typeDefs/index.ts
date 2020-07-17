@@ -1,9 +1,22 @@
 import { gql } from "apollo-server-express"
+import userSchema from "./user"
 
-const typeDefs = gql`
+const linkSchema = gql`
   type Query {
-    hello: String
+    _: Boolean
   }
+
+  type Mutation {
+    _: Boolean
+  }
+
+  type Subscription {
+    _: Boolean
+  }
+
+  scalar Date
+  scalar Time
+  scalar DateTime
 `
 
-export default typeDefs
+export default [linkSchema, userSchema]
