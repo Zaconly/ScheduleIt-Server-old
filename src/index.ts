@@ -1,5 +1,13 @@
 import "dotenv/config"
-import { testVar } from "./test"
+import express from "express"
+import server from "./middlewares/apolloServer"
 
-// eslint-disable-next-line no-console
-console.log(testVar, process.env.TEST_ENV)
+const PORT = process.env.PORT || 4000
+
+const app = express()
+
+server.applyMiddleware({ app })
+
+app.listen({ port: PORT }, () =>
+  console.info(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
+)

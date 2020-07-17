@@ -12,7 +12,7 @@ yarn dev
 
 Open [http://localhost:4000](http://localhost:4000) with your browser to see the result.
 
-You can start editing the page by modifying `src/index.ts`. The server auto-updates as you edit the file.
+You can start editing the server by modifying `src/index.ts`. It will auto-updates as you edit the file.
 
 To run in production:
 
