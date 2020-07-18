@@ -1,0 +1,26 @@
+{
+    "development": {
+        "username": "root",
+        "password": "root",
+        "database": "sdl-db-dev",
+        "host": "localhost",
+        "port": 3307,
+        "dialect": "mysql"
+    },
+    "test": {
+        "username": "root",
+        "password": "root",
+        "database": "sdl-db-test",
+        "host": "localhost",
+        "port": 3307,
+        "dialect": "mysql"
+    },
+    "production": {
+        "username": "root",
+        "password": "root",
+        "database": "sdl-db",
+        "host": "localhost",
+        "port": 3307,
+        "dialect": "mysql"
+    }
+}

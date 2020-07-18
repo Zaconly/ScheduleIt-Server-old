@@ -1,0 +1,4 @@
+# create databases
+CREATE DATABASE IF NOT EXISTS `sdl-db`;
+CREATE DATABASE IF NOT EXISTS `sdl-db-dev`;
+CREATE DATABASE IF NOT EXISTS `sdl-db-test`;

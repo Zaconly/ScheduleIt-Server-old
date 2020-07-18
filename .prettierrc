@@ -4,5 +4,6 @@
   "semi": false,
   "arrowParens": "avoid",
   "printWidth": 100,
-  "singleQuote": false
+  "singleQuote": false,
+  "endOfLine": "auto"
 }

@@ -1,72 +1,32 @@
 {
   "name": "@schedule-it/api",
   "version": "0.1.0",
+  "private": true,
   "description": "Api server for @schedule-it/client",
-  "main": "src/index.ts",
   "author": "Zaconly <thomas.vaucois@viacesi.fr>",
   "license": "MIT",
-  "dependencies": {
-    "apollo-server-express": "^2.15.1",
-    "bcryptjs": "^2.4.3",
-    "chalk": "^4.1.0",
-    "compression": "^1.7.4",
-    "cross-env": "^7.0.2",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "graphql": "^15.3.0",
-    "graphql-iso-date": "^3.6.1",
-    "helmet": "^3.23.3",
-    "mysql2": "^2.1.0",
-    "reflect-metadata": "^0.1.13",
-    "sequelize": "^6.3.3",
-    "sequelize-typescript": "^2.0.0-beta.0",
-    "shortid": "^2.2.15"
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "postinstall": "npm run bootstrap",
+    "clean": "lerna run clean",
+    "build": "lerna run build",
+    "dev": "lerna run --scope @monorepo/server dev",
+    "start": "lerna run --scope @monorepo/server start",
+    "lint": "lerna lint"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "1.17.0",
-    "@types/bcryptjs": "^2.4.2",
-    "@types/compression": "^1.7.0",
-    "@types/graphql-iso-date": "^3.4.0",
-    "@types/helmet": "^0.0.47",
-    "@types/node": "^14.0.23",
-    "@types/shortid": "^0.0.29",
-    "@types/validator": "^13.1.0",
     "@typescript-eslint/eslint-plugin": "^3.6.1",
     "@typescript-eslint/parser": "^3.6.1",
-    "apollo-server-plugin-base": "^0.9.1",
     "eslint": "^7.4.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.2.5",
+    "lerna": "^3.22.1",
     "lint-staged": "^10.2.11",
-    "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
-    "rimraf": "^3.0.2",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.7",
-    "@graphql-codegen/typescript": "1.17.0",
-    "@graphql-codegen/typescript-resolvers": "1.17.0"
-  },
-  "scripts": {
-    "dev": "nodemon",
-    "build": "rimraf ./build && tsc",
-    "start": "cross-env NODE_ENV=production node build/index.js",
-    "lint": "prettier --write",
-    "generate": "graphql-codegen --config codegen.yml",
-    "postinstall": "yarn generate"
-  },
-  "engines": {
-    "node": "14.x"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.ts": [
-      "eslint . --ext .ts",
-      "prettier --write"
-    ]
+    "typescript": "^3.9.7"
   }
 }

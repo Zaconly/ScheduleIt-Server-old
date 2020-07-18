@@ -1,0 +1,23 @@
+{
+  "name": "@monorepo/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared fonctions between @monorepo",
+  "main": "dist/index",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "npm run clean && npm run compile",
+    "clean": "rimraf -rf ./dist",
+    "compile": "tsc",
+    "lint": "prettier --write './src/**/*.ts'"
+  },
+  "dependencies": {
+    "chalk": "^4.1.0"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "typescript": "^3.9.7"
+  }
+}

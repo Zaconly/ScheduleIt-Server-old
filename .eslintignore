@@ -1,3 +1,5 @@
 node_modules
 build
-src/graphql/types.ts
+packages/database/src/seeders/*
+packages/graphql/src/types.ts
+webpack.config.js
