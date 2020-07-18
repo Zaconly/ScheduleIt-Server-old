@@ -1,8 +1,6 @@
 import { Sequelize } from "sequelize-typescript"
 import config from "./config/config.json"
-import User from "./models/User"
-import Board from "./models/Board"
-import Template from "./models/Template"
+import { User, Board, Template } from "./models"
 import { Config } from "./types"
 import { Dialect } from "sequelize/types"
 

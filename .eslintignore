@@ -1,5 +1,4 @@
 node_modules
-build
+dist
 packages/database/src/seeders/*
 packages/graphql/src/types.ts
-webpack.config.js
