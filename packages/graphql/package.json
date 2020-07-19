@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Apollo server for @monorepo/server",
-  "main": "dist/index",
+  "main": "src/index",
   "files": [
     "src"
   ],

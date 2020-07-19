@@ -8,10 +8,12 @@ import {
   Table,
   ForeignKey,
   BelongsTo,
-  AllowNull
+  AllowNull,
+  HasMany
 } from "sequelize-typescript"
 import User from "./User"
 import Template from "./Template"
+import Task from "./Task"
 
 @Table
 class Board extends Model<Board> {
@@ -45,6 +47,9 @@ class Board extends Model<Board> {
 
   @BelongsTo(() => Template as never)
   template!: Template
+
+  @HasMany(() => Task as never)
+  tasks!: Task[]
 }
 
 export default Board

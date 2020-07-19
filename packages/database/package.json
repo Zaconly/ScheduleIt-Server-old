@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "Database logic and connection for @monorepo/server",
-  "main": "dist/index",
+  "main": "src/index",
   "files": [
     "src"
   ],
@@ -11,7 +11,9 @@
     "build": "npm run clean && npm run compile",
     "clean": "rimraf -rf ./dist",
     "compile": "tsc",
-    "lint": "prettier --write './src/**/*.ts'"
+    "lint": "prettier --write './src/**/*.ts'",
+    "faker": "sequelize-cli db:seed:all --debug",
+    "faker:delete": "sequelize-cli db:seed:undo:all"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -15,7 +15,7 @@ server.applyMiddleware({ app })
 app.use(compression())
 app.use(helmet())
 
-sequelize.sync({ force: env === "development" }).then(() => {
+sequelize.sync({ force: false }).then(() => {
   app.listen({ port: PORT }, () =>
     console.info(`Server ready at http://localhost:${PORT}${server.graphqlPath}`)
   )

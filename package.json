@@ -13,8 +13,10 @@
     "postinstall": "npm run bootstrap",
     "clean": "lerna run clean",
     "build": "lerna run build",
-    "dev": "lerna run --scope @monorepo/server dev",
+    "dev": "nodemon",
     "start": "lerna run --scope @monorepo/server start",
+    "generate": "lerna run --scope @monorepo/graphql generate",
+    "faker": "lerna run --scope @monorepo/database faker",
     "lint": "lerna lint"
   },
   "devDependencies": {
@@ -26,6 +28,7 @@
     "husky": "^4.2.5",
     "lerna": "^3.22.1",
     "lint-staged": "^10.2.11",
+    "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
     "typescript": "^3.9.7"
   }

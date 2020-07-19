@@ -4,7 +4,7 @@ import { Resolvers, Maybe } from "../types"
 const boardResolver: Resolvers = {
   Query: {
     board: async (_parent, { id }): Promise<Maybe<Board>> => await Board.findByPk(id),
-    userBoards: async (): Promise<Board[]> => await Board.findAll(),
+    userBoards: async (_parent, { id }): Promise<Board[]> => await Board.findAll({ where: { id } }),
     allBoards: async (): Promise<Board[]> => await Board.findAll()
   },
   Mutation: {
