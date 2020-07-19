@@ -4,8 +4,8 @@ import path from "path"
 import constants from "./constants"
 
 const transporter = nodemailer.createTransport({
-  host: "localhost",
-  port: 1025,
+  host: process.env.MAIL_PATH,
+  port: (process.env.MAIL_PORT as unknown) as number,
   ignoreTLS: true
 })
 

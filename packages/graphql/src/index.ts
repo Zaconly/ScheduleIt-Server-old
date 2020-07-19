@@ -5,6 +5,8 @@ import { mailer } from "@monorepo/shared"
 import loggerPlugin from "./plugins/logger"
 import { Context } from "./context"
 
+console.info(process.env)
+
 export default new ApolloServer({
   typeDefs,
   resolvers,

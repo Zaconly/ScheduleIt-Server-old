@@ -78,7 +78,11 @@ class User extends Model<User> {
     return user
   }
 
-  static async changePassword(password: string, field: string, identifier: string): Promise<void> {
+  static async changePassword(
+    password: string,
+    field: "id" | "email" | "username",
+    identifier: string
+  ): Promise<void> {
     const newPassword = await bcrypt.hash(password, 10)
     await User.update({ password: newPassword }, { where: { [field]: identifier } })
   }

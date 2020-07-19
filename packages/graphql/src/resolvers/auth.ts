@@ -56,10 +56,7 @@ const authResolver: Resolvers<Context> = {
             template: mailer.constants.forgotPassword.template,
             context: {
               username: user.username,
-              companyName: "ScheduleIt",
-              resetLink: `http://localhost:3000/forgot-password?t=${encodeURIComponent(token)}&e=${
-                user.email
-              }`
+              resetLink: `${process.env.CLIENT_PATH}/forgot-password/${encodeURIComponent(token)}`
             }
           })
         }
@@ -69,14 +66,15 @@ const authResolver: Resolvers<Context> = {
         throw new ApolloError("Internal Server Error", "INTERNAL_SERVER_ERROR")
       }
     },
-    resetPassword: async (_parent, { token, email, newPassword }): Promise<boolean> => {
+    resetPassword: async (_parent, { token: encodedToken, newPassword }): Promise<boolean> => {
       try {
+        const token = decodeURIComponent(encodedToken)
+
         const record = await ResetToken.findOne({
           where: {
-            email,
             expirationDate: { [Op.gt]: fn("CURDATE") },
             token,
-            isUsed: 0
+            isUsed: false
           }
         })
 
@@ -89,7 +87,7 @@ const authResolver: Resolvers<Context> = {
 
         await ResetToken.update({ isUsed: true }, { where: { token } })
 
-        await User.changePassword(newPassword, "email", email)
+        await User.changePassword(newPassword, "email", record.email)
 
         return true
       } catch (e) {

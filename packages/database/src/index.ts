@@ -16,5 +16,6 @@ const sequelize = new Sequelize({
 })
 
 export * from "./models"
+export { Op, fn } from "sequelize"
 
 export default sequelize
