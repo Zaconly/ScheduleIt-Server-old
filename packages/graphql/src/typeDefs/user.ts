@@ -8,13 +8,17 @@ const userSchema = gql`
 
   extend type Mutation {
     addUser(input: UserInput!): User
-    updateUser(id: ID!, input: UserInput!): User
+    updateUser(id: ID!, input: UpdateInput!): User
     deleteUser(id: ID!): Boolean
   }
 
   enum Role {
     USER
     ADMIN
+  }
+
+  input UpdateInput {
+    username: String
   }
 
   input UserInput {

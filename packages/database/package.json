@@ -13,7 +13,7 @@
     "compile": "tsc",
     "lint": "prettier --write './src/**/*.ts'",
     "faker": "sequelize-cli db:seed:all --debug",
-    "faker:delete": "sequelize-cli db:seed:undo:all"
+    "faker:clean": "sequelize-cli db:seed:undo:all"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

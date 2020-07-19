@@ -1,7 +1,8 @@
 import { Template } from "@monorepo/database"
 import { Resolvers, Maybe } from "../types"
+import { Context } from "../context"
 
-const templateResolver: Resolvers = {
+const templateResolver: Resolvers<Context> = {
   Query: {
     template: async (_parent, { id }): Promise<Maybe<Template>> => await Template.findByPk(id),
     authorTemplates: async (_parent, { authorId }): Promise<Template[]> =>

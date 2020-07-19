@@ -1,7 +1,8 @@
 import { Board } from "@monorepo/database"
 import { Resolvers, Maybe } from "../types"
+import { Context } from "../context"
 
-const boardResolver: Resolvers = {
+const boardResolver: Resolvers<Context> = {
   Query: {
     board: async (_parent, { id }): Promise<Maybe<Board>> => await Board.findByPk(id),
     userBoards: async (_parent, { id }): Promise<Board[]> => await Board.findAll({ where: { id } }),

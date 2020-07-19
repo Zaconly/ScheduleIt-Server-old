@@ -9,10 +9,10 @@ import {
   IsAlphanumeric,
   Length,
   IsEmail,
-  BeforeCreate,
   Table,
   HasMany,
-  AllowNull
+  AllowNull,
+  BeforeCreate
 } from "sequelize-typescript"
 import Template from "./Template"
 import Board from "./Board"
@@ -76,6 +76,11 @@ class User extends Model<User> {
     }
 
     return user
+  }
+
+  static async changePassword(password: string, field: string, identifier: string): Promise<void> {
+    const newPassword = await bcrypt.hash(password, 10)
+    await User.update({ password: newPassword }, { where: { [field]: identifier } })
   }
 
   async validatePassword(password: string): Promise<boolean> {

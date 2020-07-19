@@ -1,7 +1,8 @@
 import { User } from "@monorepo/database"
 import { Resolvers, Maybe } from "../types"
+import { Context } from "../context"
 
-const userResolver: Resolvers = {
+const userResolver: Resolvers<Context> = {
   Query: {
     user: async (_parent, { id }): Promise<Maybe<User>> => await User.findByPk(id),
     allUsers: async (): Promise<User[]> => await User.findAll()
@@ -13,7 +14,9 @@ const userResolver: Resolvers = {
       return newUser
     },
     updateUser: async (_parent, { id, input }): Promise<Maybe<User>> => {
-      await User.update(input, { where: { id } })
+      if (input.username) {
+        await User.update({ username: input.username }, { where: { id } })
+      }
 
       const updatedUser = await User.findByPk(id)
       return updatedUser

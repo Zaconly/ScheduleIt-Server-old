@@ -10,7 +10,8 @@
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "typeRoots": ["./packages/shared/src/typings"]
   },
   "baseUrl": ".",
   "paths": {

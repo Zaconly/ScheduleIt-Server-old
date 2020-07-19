@@ -2,19 +2,21 @@
 
 ## Getting Started
 
-First, run the development server:
+To launch the server in development mode:
 
 ```bash
-npm run dev
-# or
+docker-compose -f docker/mysql.yml up -d # Launch Databases
+docker-compose -f docker/maildev.yml up -d # Launch Mail Server
+yarn install # Install depedencies
+yarn generate # Generate GraphQL types
 yarn dev
 ```
 
-Open [http://localhost:4000](http://localhost:4000) with your browser to see the result.
+Use [http://localhost:4000/graphql](http://localhost:4000/graphql) to interact with GraphQL server.
 
-You can start editing the server by modifying `src/index.ts`. It will auto-updates as you edit the file.
+You can start editing the server by modifying `packages/**/*.ts`. It will auto-updates as you edit the file.
 
-To run in production:
+To run in production mode:
 
 ```bash
 yarn build

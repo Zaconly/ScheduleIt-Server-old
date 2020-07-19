@@ -1,8 +1,10 @@
 const faker = require("faker")
 const shortid = require("shortid")
+const bcrypt = require("bcryptjs")
 
 const users = []
 const baseProps = {
+  password: bcrypt.hashSync("root", 10),
   isActive: true,
   createdAt: new Date(),
   updatedAt: new Date()
@@ -14,7 +16,6 @@ users.push(
     id: shortid.generate(),
     username: "ScheduleIt",
     email: "noreply@scheduleit.com",
-    password: "root",
     role: "ADMIN",
     ...baseProps
   },
@@ -22,7 +23,6 @@ users.push(
     id: shortid.generate(),
     username: "Zaconly",
     email: "thomas.vaucois@viacesi.fr",
-    password: "root",
     role: "ADMIN",
     ...baseProps
   }
@@ -34,7 +34,6 @@ users.push(
     id: shortid.generate(),
     username: faker.internet.userName(),
     email: faker.internet.email(),
-    password: faker.internet.password(8),
     role: "USER",
     ...baseProps
   }))
