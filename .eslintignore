@@ -1,4 +1,5 @@
 node_modules
 dist
-packages/database/src/seeders/*
-packages/graphql/src/types.ts
+src/database/src/seeders/*
+src/graphql/src/types.ts
+webpack.config.js

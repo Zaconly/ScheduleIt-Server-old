@@ -4,18 +4,15 @@
     "target": "esnext",
     "lib": ["es6"],
     "module": "CommonJS",
-    "declaration": true,
+    "outDir": "./dist/",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "typeRoots": ["./packages/shared/src/typings"]
+    "typeRoots": ["./src/utils/typings"]
   },
   "baseUrl": ".",
-  "paths": {
-    "@monorepo/*": ["packages/*/src"]
-  },
   "exclude": ["node_modules", "dist"]
 }

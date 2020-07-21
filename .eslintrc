@@ -9,7 +9,7 @@
     "prettier"
   ],
   "rules": {
-    "no-console": ["error", { "allow": ["info", "warn", "error"] }],
+    "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
     "prettier/prettier": 1,
     "@typescript-eslint/explicit-module-boundary-types": 0,
     "@typescript-eslint/ban-ts-comment": 0
