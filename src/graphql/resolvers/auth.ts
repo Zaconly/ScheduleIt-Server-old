@@ -1,33 +1,40 @@
 import { User, ResetToken } from "../../database/models"
 import { Op, fn } from "sequelize"
 import cryto from "crypto"
-import { Resolvers, Me } from "../types"
+import { Resolvers, AuthPayload } from "../types"
 import { ApolloError } from "apollo-server-express"
 import { Context } from "../context"
+import { generateTokens } from "../../utils/token"
 
 const authResolver: Resolvers<Context> = {
   Query: {},
   Mutation: {
-    login: async (_parent, { input: { identifier, password } }): Promise<Me> => {
+    login: async (_parent, { input: { identifier, password } }): Promise<AuthPayload> => {
       const user = await User.findByIdentifier(identifier)
       if (!user) throw new ApolloError("Wrong credentials", "WRONG_CREDENTIALS")
 
       const isValid = await user.validatePassword(password)
       if (!isValid) throw new ApolloError("Wrong credentials", "WRONG_CREDENTIALS")
 
+      const { accessToken, refreshToken, expiryDate } = await generateTokens(user)
+
       return {
         me: user,
-        token: "TODO_TOKEN",
-        refreshToken: "TODO_REFRESH_TOKEN"
+        token: accessToken,
+        expiryDate,
+        refreshToken
       }
     },
-    register: async (_parent, { input }): Promise<Me> => {
+    register: async (_parent, { input }): Promise<AuthPayload> => {
       const newUser = await User.create(input)
+
+      const { accessToken, refreshToken, expiryDate } = await generateTokens(newUser)
 
       return {
         me: newUser,
-        token: "TODO_TOKEN",
-        refreshToken: "TODO_REFRESH_TOKEN"
+        token: accessToken,
+        expiryDate,
+        refreshToken
       }
     },
     forgotPassword: async (_parent, { email }, { mailer }): Promise<boolean> => {

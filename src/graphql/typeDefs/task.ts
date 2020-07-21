@@ -4,7 +4,7 @@ const taskSchema = gql`
   extend type Query {
     task(id: ID!): Task
     boardTasks(boardId: ID!): [Task!]
-    userTasks(userId: ID): [Task!]
+    userTasks: [Task!]
   }
 
   extend type Mutation {

@@ -24,7 +24,7 @@ export type Query = {
   authorTemplates?: Maybe<Array<Template>>
   board?: Maybe<Board>
   boardTasks?: Maybe<Array<Task>>
-  me: Me
+  me: AuthPayload
   task?: Maybe<Task>
   template?: Maybe<Template>
   user?: Maybe<User>
@@ -60,10 +60,6 @@ export type QueryUserBoardsArgs = {
   userId?: Maybe<Scalars["ID"]>
 }
 
-export type QueryUserTasksArgs = {
-  userId?: Maybe<Scalars["ID"]>
-}
-
 export type Mutation = {
   __typename?: "Mutation"
   _?: Maybe<Scalars["Boolean"]>
@@ -77,8 +73,8 @@ export type Mutation = {
   deleteTemplate?: Maybe<Scalars["Boolean"]>
   deleteUser?: Maybe<Scalars["Boolean"]>
   forgotPassword: Scalars["Boolean"]
-  login: Me
-  register: Me
+  login: AuthPayload
+  register: AuthPayload
   resetPassword: Scalars["Boolean"]
   updateBoard?: Maybe<Board>
   updateTask?: Maybe<Task>
@@ -162,10 +158,11 @@ export type MutationUpdateUserArgs = {
   input: UpdateInput
 }
 
-export type Me = {
-  __typename?: "Me"
+export type AuthPayload = {
+  __typename?: "AuthPayload"
   me: User
   token: Scalars["String"]
+  expiryDate: Scalars["DateTime"]
   refreshToken: Scalars["String"]
 }
 
@@ -360,7 +357,7 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars["ID"]>
   Mutation: ResolverTypeWrapper<{}>
   String: ResolverTypeWrapper<Scalars["String"]>
-  Me: ResolverTypeWrapper<Me>
+  AuthPayload: ResolverTypeWrapper<AuthPayload>
   LoginInput: LoginInput
   RegisterInput: RegisterInput
   BoardInput: BoardInput
@@ -386,7 +383,7 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars["ID"]
   Mutation: {}
   String: Scalars["String"]
-  Me: Me
+  AuthPayload: AuthPayload
   LoginInput: LoginInput
   RegisterInput: RegisterInput
   BoardInput: BoardInput
@@ -430,7 +427,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryBoardTasksArgs, "boardId">
   >
-  me?: Resolver<ResolversTypes["Me"], ParentType, ContextType>
+  me?: Resolver<ResolversTypes["AuthPayload"], ParentType, ContextType>
   task?: Resolver<
     Maybe<ResolversTypes["Task"]>,
     ParentType,
@@ -455,12 +452,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryUserBoardsArgs, never>
   >
-  userTasks?: Resolver<
-    Maybe<Array<ResolversTypes["Task"]>>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryUserTasksArgs, never>
-  >
+  userTasks?: Resolver<Maybe<Array<ResolversTypes["Task"]>>, ParentType, ContextType>
 }>
 
 export type MutationResolvers<
@@ -529,13 +521,13 @@ export type MutationResolvers<
     RequireFields<MutationForgotPasswordArgs, "email">
   >
   login?: Resolver<
-    ResolversTypes["Me"],
+    ResolversTypes["AuthPayload"],
     ParentType,
     ContextType,
     RequireFields<MutationLoginArgs, "input">
   >
   register?: Resolver<
-    ResolversTypes["Me"],
+    ResolversTypes["AuthPayload"],
     ParentType,
     ContextType,
     RequireFields<MutationRegisterArgs, "input">
@@ -572,12 +564,13 @@ export type MutationResolvers<
   >
 }>
 
-export type MeResolvers<
+export type AuthPayloadResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes["Me"] = ResolversParentTypes["Me"]
+  ParentType extends ResolversParentTypes["AuthPayload"] = ResolversParentTypes["AuthPayload"]
 > = ResolversObject<{
   me?: Resolver<ResolversTypes["User"], ParentType, ContextType>
   token?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  expiryDate?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>
   refreshToken?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }>
@@ -660,7 +653,7 @@ export type UserResolvers<
 export type Resolvers<ContextType = any> = ResolversObject<{
   Query?: QueryResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
-  Me?: MeResolvers<ContextType>
+  AuthPayload?: AuthPayloadResolvers<ContextType>
   Board?: BoardResolvers<ContextType>
   Subscription?: SubscriptionResolvers<ContextType>
   Date?: GraphQLScalarType

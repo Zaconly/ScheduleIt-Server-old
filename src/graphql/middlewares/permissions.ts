@@ -1,4 +1,4 @@
-import { shield, rule, not, or, and } from "graphql-shield"
+import { shield, rule, not, or, chain } from "graphql-shield"
 import { applyMiddleware } from "graphql-middleware"
 import { makeExecutableSchema } from "apollo-server-express"
 import typeDefs from "../typeDefs"
@@ -32,46 +32,48 @@ const isTemplateOwner = rule()(async (_parent, { id }, { me }) => {
   return !!template
 })
 
-const permissions = shield({
-  Query: {
-    me: isAuth,
-    board: and(isAuth, or(isAdmin, isBoardOwner)),
-    userBoards: and(isAuth, isAdmin),
-    allBoards: and(isAuth, isAdmin),
-    task: and(isAuth, or(isAdmin, isTaskOwner)),
-    boardTasks: and(isAuth, or(isAdmin, isBoardOwner)),
-    userTasks: isAuth,
-    template: isAuth,
-    authorTemplates: isAuth,
-    allTemplates: isAuth,
-    user: and(isAuth, isAdmin),
-    allUsers: and(isAuth, isAdmin)
+const permissions = shield(
+  {
+    Query: {
+      me: isAuth,
+      board: chain(isAuth, or(isAdmin, isBoardOwner)),
+      userBoards: chain(isAuth, isAdmin),
+      allBoards: chain(isAuth, isAdmin),
+      task: chain(isAuth, or(isAdmin, isTaskOwner)),
+      boardTasks: chain(isAuth, or(isAdmin, isBoardOwner)),
+      userTasks: isAuth,
+      template: isAuth,
+      authorTemplates: isAuth,
+      allTemplates: isAuth,
+      user: chain(isAuth, isAdmin),
+      allUsers: chain(isAuth, isAdmin)
+    },
+    Mutation: {
+      login: not(isAuth),
+      register: not(isAuth),
+      forgotPassword: not(isAuth),
+      resetPassword: not(isAuth),
+      changePassword: isAuth,
+      addBoard: isAuth,
+      updateBoard: chain(isAuth, or(isAdmin, isBoardOwner)),
+      deleteBoard: chain(isAuth, or(isAdmin, isBoardOwner)),
+      addTask: isAuth,
+      updateTask: chain(isAuth, or(isAdmin, isTaskOwner)),
+      deleteTask: chain(isAuth, or(isAdmin, isTaskOwner)),
+      addTemplate: isAuth,
+      updateTemplate: chain(isAuth, or(isAdmin, isTemplateOwner)),
+      deleteTemplate: chain(isAuth, or(isAdmin, isTemplateOwner)),
+      addUser: chain(isAuth, isAdmin),
+      updateUser: chain(isAuth, isAdmin),
+      deleteUser: chain(isAuth, isAdmin)
+    },
+    AuthPayload: not(isAuth),
+    Board: isAuth,
+    Task: isAuth,
+    Template: isAuth
   },
-  Mutation: {
-    login: not(isAuth),
-    register: not(isAuth),
-    forgotPassword: not(isAuth),
-    resetPassword: not(isAuth),
-    changePassword: isAuth,
-    addBoard: isAuth,
-    updateBoard: and(isAuth, or(isAdmin, isBoardOwner)),
-    deleteBoard: and(isAuth, or(isAdmin, isBoardOwner)),
-    addTask: isAuth,
-    updateTask: and(isAuth, or(isAdmin, isTaskOwner)),
-    deleteTask: and(isAuth, or(isAdmin, isTaskOwner)),
-    addTemplate: isAuth,
-    updateTemplate: and(isAuth, or(isAdmin, isTemplateOwner)),
-    deleteTemplate: and(isAuth, or(isAdmin, isTemplateOwner)),
-    addUser: and(isAuth, isAdmin),
-    updateUser: and(isAuth, isAdmin),
-    deleteUser: and(isAuth, isAdmin)
-  },
-  Me: isAuth,
-  Board: isAuth,
-  Task: isAuth,
-  Template: isAuth,
-  User: isAuth
-})
+  { debug: true }
+)
 
 const schema = applyMiddleware(
   makeExecutableSchema({
