@@ -5,16 +5,18 @@ import { Resolvers, AuthPayload } from "../types"
 import { ApolloError } from "apollo-server-express"
 import { Context } from "../context"
 import { generateTokens } from "../../utils/token"
+import { CredentialsError, ServerError, TokenError, NotFoundError } from "../errors"
+import { logger } from "../../utils"
 
 const authResolver: Resolvers<Context> = {
   Query: {},
   Mutation: {
     login: async (_parent, { input: { identifier, password } }): Promise<AuthPayload> => {
       const user = await User.findByIdentifier(identifier)
-      if (!user) throw new ApolloError("Wrong credentials", "WRONG_CREDENTIALS")
+      if (!user) throw new CredentialsError()
 
       const isValid = await user.validatePassword(password)
-      if (!isValid) throw new ApolloError("Wrong credentials", "WRONG_CREDENTIALS")
+      if (!isValid) throw new CredentialsError()
 
       const { accessToken, refreshToken, expiryDate } = await generateTokens(user)
 
@@ -70,8 +72,8 @@ const authResolver: Resolvers<Context> = {
 
         return true
       } catch (e) {
-        console.info(e)
-        throw new ApolloError("Internal Server Error", "INTERNAL_SERVER_ERROR")
+        logger(e, "ERROR")
+        throw new ServerError()
       }
     },
     resetPassword: async (_parent, { token: encodedToken, newPassword }): Promise<boolean> => {
@@ -87,10 +89,7 @@ const authResolver: Resolvers<Context> = {
         })
 
         if (!record) {
-          throw new ApolloError(
-            "Reset token is invalid or expired, please request a new one",
-            "INVALID_TOKEN"
-          )
+          throw new TokenError("Reset token is invalid or expired, please request a new one")
         }
 
         await ResetToken.update({ isUsed: true }, { where: { token } })
@@ -99,15 +98,15 @@ const authResolver: Resolvers<Context> = {
 
         return true
       } catch (e) {
-        throw new ApolloError("Internal Server Error", "INTERNAL_SERVER_ERROR")
+        throw new ServerError()
       }
     },
     changePassword: async (_parent, { oldPassword, newPassword }, { me }): Promise<boolean> => {
       try {
-        if (!me) throw new ApolloError("User not found", "NOT_FOUND")
+        if (!me) throw new NotFoundError("User not found")
 
         const user = await User.findByPk(me.id)
-        if (!user) throw new ApolloError("User not found", "NOT_FOUND")
+        if (!user) throw new NotFoundError("User not found")
 
         const isValid = await user.validatePassword(oldPassword)
         if (!isValid) throw new ApolloError("Password invalid", "INVALID_PASSWORD")
@@ -116,7 +115,8 @@ const authResolver: Resolvers<Context> = {
 
         return true
       } catch (e) {
-        throw new ApolloError("Internal Server Error", "INTERNAL_SERVER_ERROR")
+        logger(e, "ERROR")
+        throw new ServerError("Internal Server Error")
       }
     }
   }

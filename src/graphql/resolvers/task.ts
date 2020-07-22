@@ -1,6 +1,8 @@
 import { Task, Board } from "../../database/models"
 import { Resolvers, Maybe } from "../types"
 import { Context } from "../context"
+import { ServerError } from "../errors"
+import { logger } from "../../utils"
 
 const TaskResolver: Resolvers<Context> = {
   Query: {
@@ -38,7 +40,8 @@ const TaskResolver: Resolvers<Context> = {
 
         return true
       } catch (e) {
-        return false
+        logger(e, "ERROR")
+        throw new ServerError()
       }
     }
   }

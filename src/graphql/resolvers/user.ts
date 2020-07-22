@@ -1,6 +1,8 @@
 import { User } from "../../database/models"
 import { Resolvers, Maybe } from "../types"
 import { Context } from "../context"
+import { logger } from "../../utils"
+import { ServerError } from "../errors"
 
 const userResolver: Resolvers<Context> = {
   Query: {
@@ -27,7 +29,8 @@ const userResolver: Resolvers<Context> = {
 
         return true
       } catch (e) {
-        return false
+        logger(e, "ERROR")
+        throw new ServerError()
       }
     }
   }
