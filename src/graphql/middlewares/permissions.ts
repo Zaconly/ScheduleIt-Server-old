@@ -4,24 +4,16 @@ import { makeExecutableSchema, ApolloError, ForbiddenError } from "apollo-server
 import typeDefs from "../typeDefs"
 import resolvers from "../resolvers"
 import { Board, Task, Template } from "../../database/models"
-import { logger } from "../../utils"
-import { ServerError } from "../errors"
 
 const AuthenticatedError = new ApolloError("You must be logout to do this action", "AUTHENTICATED")
-const notAuthorizedMsg = "You are not authorized to access this resource"
 
 const isAuth = rule({ cache: "contextual" })(async (_parent, _args, { me }) => !!me)
 
-const isAdmin = rule({ cache: "contextual" })(async (_parent, _args, { me }) => {
-  if (me.role === "ADMIN") return true
-  throw new ForbiddenError(notAuthorizedMsg)
-})
+const isAdmin = rule({ cache: "contextual" })(async (_parent, _args, { me }) => me.role === "ADMIN")
 
 const isBoardOwner = rule()(async (_parent, args, { me }) => {
   const board = await Board.findOne({ where: { id: args.id || args.boardId, userId: me.id } })
-
-  if (board) return true
-  throw new ForbiddenError(notAuthorizedMsg)
+  return !!board
 })
 
 const isTaskOwner = rule()(async (_parent, { id }, { me }) => {
@@ -35,15 +27,12 @@ const isTaskOwner = rule()(async (_parent, { id }, { me }) => {
     ]
   })
 
-  if (task) return true
-  throw new ForbiddenError(notAuthorizedMsg)
+  return !!task
 })
 
 const isTemplateOwner = rule()(async (_parent, { id }, { me }) => {
   const template = await Template.findOne({ where: { id, authorId: me.id } })
-
-  if (template) return true
-  throw new ForbiddenError(notAuthorizedMsg)
+  return !!template
 })
 
 const permissions = shield(
@@ -87,15 +76,13 @@ const permissions = shield(
     Template: isAuth
   },
   {
-    debug: process.env.NODE_ENV !== "production",
     fallbackError: errThrown => {
       if (errThrown instanceof ApolloError) {
         return errThrown
       } else if (errThrown instanceof Error) {
-        logger(errThrown.message, "ERROR")
-        return new ServerError()
+        return new ForbiddenError("You are not authorized to access this resource")
       } else {
-        return new ServerError()
+        return new ForbiddenError("You are not authorized to access this resource")
       }
     }
   }

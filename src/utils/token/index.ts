@@ -3,6 +3,7 @@ import crypto from "crypto"
 import { Request } from "express"
 import { Maybe } from "../../graphql/types"
 import { AccessTokenPayload, TokenPayload, TokenType, DecodedData } from "./types"
+import { TokenError } from "../../graphql/errors"
 
 /**
  * Create a new JWT access token
@@ -70,8 +71,14 @@ const getToken = (req: Request, name: TokenType = "access"): Maybe<string> => {
 export const validateToken = async (req: Request): Promise<Maybe<DecodedData>> => {
   const token = getToken(req)
 
-  if (token) {
+  if (!token) return null
+
+  try {
     return jwt.verify(token, process.env.TOKEN_SECRET as string) as Maybe<DecodedData>
+  } catch (e) {
+    if (e.name === "TokenExpiredError") {
+      throw new TokenError("Your token has expired")
+    }
   }
 
   return null
