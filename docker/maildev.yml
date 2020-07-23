@@ -2,8 +2,8 @@ version: '3.8'
 services:
   sdl-maildev:
     container_name: sdl-maildev
-    image: maildev/maildev
+    image: maildev/maildev:2.0.0-beta3
     restart: always
     ports:
-      - "1080:80"
-      - "1025:25"
+      - "1080:1080"
+      - "1025:1025"

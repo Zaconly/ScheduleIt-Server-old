@@ -1,0 +1,24 @@
+# Docker
+docker/
+Dockerfile*
+
+# Packages
+node_modules/
+dist/
+
+# Config
+.git
+.gitignore
+.vscode
+.env.example
+.env
+.eslint
+.eslintignore
+.prettierrc
+codegen.yml
+nodemon.json
+yarn-error.log
+
+# Misc
+README.md
+LICENSE

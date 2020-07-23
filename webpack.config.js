@@ -1,10 +1,12 @@
 const path = require("path")
 const nodeExternals = require("webpack-node-externals")
-
-const { NODE_ENV = "production" } = process.env
+const webpack = require("webpack")
+const dotenv = require("dotenv").config({
+  path: path.join(__dirname, ".env")
+})
 
 module.exports = {
-  mode: NODE_ENV,
+  mode: process.env.NODE_ENV || "production",
   entry: "./src/index.ts",
   module: {
     rules: [
@@ -22,5 +24,13 @@ module.exports = {
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist")
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env":
+        process.env.NODE_ENV === "production"
+          ? JSON.stringify(process.env)
+          : JSON.stringify(dotenv.parsed)
+    })
+  ]
 }

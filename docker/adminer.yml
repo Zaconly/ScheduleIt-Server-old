@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  sdl-adminer:
+    container_name: sdl-adminer
+    image: adminer
+    restart: always
+    environment:
+      - ADMINER_DEFAULT_SERVER=sdl-mysql
+    ports:
+      - "9080:8080"

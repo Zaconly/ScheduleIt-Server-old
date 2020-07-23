@@ -2,11 +2,20 @@ import nodemailer from "nodemailer"
 import hbs from "nodemailer-express-handlebars"
 import path from "path"
 import constants from "./constants"
+import { logger } from ".."
 
 const transporter = nodemailer.createTransport({
-  host: process.env.MAIL_PATH,
+  host: process.env.MAIL_HOST || "localhost",
   port: (process.env.MAIL_PORT as unknown) as number,
   ignoreTLS: true
+})
+
+transporter.verify(error => {
+  if (error) {
+    logger("Nodemailer: " + error.message, "ERROR")
+  } else {
+    logger("Nodemailer: Connected and ready")
+  }
 })
 
 const templatesPath = path.join(__dirname, "templates")

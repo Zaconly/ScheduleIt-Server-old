@@ -1,17 +1,16 @@
 import { Sequelize } from "sequelize-typescript"
-import config from "./config/config.json"
 import { User, Template, Board, Task, ResetToken } from "./models"
-import { Config } from "./types"
-import { Dialect } from "sequelize/types"
 
-const conf: { [index: string]: Config } = config
-const env = process.env.NODE_ENV || "development"
+const { DB_USER, DB_PWD, DB_NAME, DB_PORT, DB_HOST = "localhost" } = process.env
 
 // @ts-ignore
 const sequelize = new Sequelize({
-  ...conf[env],
-  port: conf[env].port || 3306,
-  dialect: (conf[env].dialect as Dialect) || "mysql",
+  username: DB_USER || "root",
+  password: DB_PWD || "root",
+  database: DB_NAME,
+  port: DB_HOST === "localhost" ? DB_PORT || 3306 : undefined,
+  host: DB_HOST,
+  dialect: "mysql",
   models: [User, ResetToken, Template, Board, Task]
 })
 

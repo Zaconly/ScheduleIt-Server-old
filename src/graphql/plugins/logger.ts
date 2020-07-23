@@ -3,7 +3,8 @@ import { logger } from "../../utils"
 
 const loggerPlugin: ApolloServerPlugin = {
   requestDidStart(requestContext) {
-    logger("Request started\n" + requestContext.request.query)
+    process.env.NODE_ENV !== "production" &&
+      logger("Request started\n" + requestContext.request.query)
 
     return {
       didEncounterErrors(requestContext) {
