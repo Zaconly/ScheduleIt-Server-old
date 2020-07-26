@@ -74,6 +74,7 @@ export type Mutation = {
   deleteUser?: Maybe<Scalars["Boolean"]>
   forgotPassword: Scalars["Boolean"]
   login: AuthPayload
+  logout: Scalars["Boolean"]
   register: AuthPayload
   resetPassword: Scalars["Boolean"]
   updateBoard?: Maybe<Board>
@@ -161,9 +162,6 @@ export type MutationUpdateUserArgs = {
 export type AuthPayload = {
   __typename?: "AuthPayload"
   me: User
-  token: Scalars["String"]
-  expiryDate: Scalars["DateTime"]
-  refreshToken: Scalars["String"]
 }
 
 export type LoginInput = {
@@ -526,6 +524,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationLoginArgs, "input">
   >
+  logout?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>
   register?: Resolver<
     ResolversTypes["AuthPayload"],
     ParentType,
@@ -569,9 +568,6 @@ export type AuthPayloadResolvers<
   ParentType extends ResolversParentTypes["AuthPayload"] = ResolversParentTypes["AuthPayload"]
 > = ResolversObject<{
   me?: Resolver<ResolversTypes["User"], ParentType, ContextType>
-  token?: Resolver<ResolversTypes["String"], ParentType, ContextType>
-  expiryDate?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>
-  refreshToken?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }>
 

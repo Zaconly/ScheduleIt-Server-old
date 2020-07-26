@@ -1,10 +1,13 @@
 import { Mailer } from "../utils/mail"
-import { Request } from "express"
-import { Maybe } from "./types"
-import { DecodedData } from "../utils/token/types"
+import { Maybe, User } from "./types"
+import { PassportContext } from "graphql-passport"
 
-export interface Context {
-  me: Maybe<DecodedData>
+interface Credentials {
+  username: string
+  password: string
+}
+
+export interface Context extends PassportContext<User, Credentials | User> {
+  me: Maybe<User>
   mailer: Mailer
-  req: Request
 }

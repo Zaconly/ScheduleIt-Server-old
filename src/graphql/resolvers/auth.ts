@@ -4,39 +4,41 @@ import cryto from "crypto"
 import { Resolvers, AuthPayload } from "../types"
 import { ApolloError } from "apollo-server-express"
 import { Context } from "../context"
-import { generateTokens } from "../../utils/token"
-import { CredentialsError, ServerError, TokenError, NotFoundError } from "../errors"
+import { ServerError, TokenError, NotFoundError } from "../errors"
 import { logger } from "../../utils"
 
 const authResolver: Resolvers<Context> = {
   Query: {},
   Mutation: {
-    login: async (_parent, { input: { identifier, password } }): Promise<AuthPayload> => {
-      const user = await User.findByIdentifier(identifier)
-      if (!user) throw new CredentialsError()
+    login: async (
+      _parent,
+      { input: { identifier, password } },
+      { authenticate, login }
+    ): Promise<AuthPayload> => {
+      const { user } = await authenticate("graphql-local", { username: identifier, password })
+      login(user)
 
-      const isValid = await user.validatePassword(password)
-      if (!isValid) throw new CredentialsError()
-
-      const { accessToken, refreshToken, expiryDate } = await generateTokens(user)
-
-      return {
-        me: user,
-        token: accessToken,
-        expiryDate,
-        refreshToken
-      }
+      return { me: user }
     },
-    register: async (_parent, { input }): Promise<AuthPayload> => {
-      const newUser = await User.create(input)
+    register: async (_parent, { input }, { authenticate, login }): Promise<AuthPayload> => {
+      await User.create(input)
 
-      const { accessToken, refreshToken, expiryDate } = await generateTokens(newUser)
+      const { user } = await authenticate("graphql-local", {
+        username: input.username,
+        password: input.password
+      })
 
-      return {
-        me: newUser,
-        token: accessToken,
-        expiryDate,
-        refreshToken
+      login(user)
+
+      return { me: user }
+    },
+    logout: async (_parent, _args, { logout }): Promise<boolean> => {
+      try {
+        logout()
+
+        return true
+      } catch (e) {
+        throw new ServerError()
       }
     },
     forgotPassword: async (_parent, { email }, { mailer }): Promise<boolean> => {
@@ -51,14 +53,14 @@ const authResolver: Resolvers<Context> = {
           const expirationDate = new Date()
           expirationDate.setDate(expirationDate.getDate() + 1 / 24)
 
-          await ResetToken.create({
+          ResetToken.create({
             email,
             expirationDate,
             token,
             isUsed: false
           })
 
-          await mailer.sendMail({
+          mailer.sendMail({
             from: mailer.constants.sender,
             to: email,
             subject: mailer.constants.forgotPassword.title,

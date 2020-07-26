@@ -8,6 +8,7 @@ const authSchema = gql`
   extend type Mutation {
     login(input: LoginInput!): AuthPayload!
     register(input: RegisterInput!): AuthPayload!
+    logout: Boolean!
     forgotPassword(email: String!): Boolean!
     resetPassword(token: String!, email: String!, newPassword: String!): Boolean!
     changePassword(oldPassword: String!, newPassword: String!): Boolean!
@@ -15,9 +16,6 @@ const authSchema = gql`
 
   type AuthPayload {
     me: User!
-    token: String!
-    expiryDate: DateTime!
-    refreshToken: String!
   }
 
   input LoginInput {
