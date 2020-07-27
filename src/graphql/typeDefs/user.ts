@@ -33,6 +33,7 @@ const userSchema = gql`
     email: String!
     isActive: Boolean!
     role: Role!
+    boards: [Board]!
     createdAt: DateTime
     updatedAt: DateTime
   }

@@ -5,7 +5,7 @@ const { REDIS_PORT, REDIS_HOST = "localhost" } = process.env
 
 const redis = new Redis({
   host: REDIS_HOST,
-  port: REDIS_HOST === "localhost" ? ((REDIS_PORT as unknown) as number) : undefined
+  port: REDIS_HOST === "localhost" ? +REDIS_PORT : undefined
 })
 
 redis.on("connect", () => {

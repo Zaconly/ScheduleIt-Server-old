@@ -1,13 +1,17 @@
-import { User } from "../../database/models"
+import { User } from "../../database"
 import { Resolvers, Maybe } from "../types"
 import { Context } from "../context"
 import { logger } from "../../utils"
 import { ServerError } from "../errors"
+import { resolver } from "graphql-sequelize"
 
 const userResolver: Resolvers<Context> = {
+  User: {
+    boards: resolver(User.associations.boards)
+  },
   Query: {
-    user: async (_parent, { id }): Promise<Maybe<User>> => await User.findByPk(id),
-    allUsers: async (): Promise<User[]> => await User.findAll()
+    user: resolver(User),
+    allUsers: resolver(User)
   },
   Mutation: {
     addUser: async (_parent, { input }): Promise<Maybe<User>> => {

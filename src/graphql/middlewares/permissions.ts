@@ -70,7 +70,6 @@ const permissions = shield(
       updateUser: chain(isAuth, isAdmin),
       deleteUser: chain(isAuth, isAdmin)
     },
-    AuthPayload: not(isAuth, AuthenticatedError),
     Board: isAuth,
     Task: isAuth,
     Template: isAuth

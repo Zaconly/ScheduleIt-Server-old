@@ -1,15 +1,18 @@
-import { Board } from "../../database/models"
+import { Board } from "../../database"
 import { Resolvers, Maybe } from "../types"
 import { Context } from "../context"
 import { ServerError } from "../errors"
 import { logger } from "../../utils"
+import { resolver } from "graphql-sequelize"
 
 const boardResolver: Resolvers<Context> = {
+  Board: {
+    tasks: resolver(Board.associations.tasks)
+  },
   Query: {
-    board: async (_parent, { id }): Promise<Maybe<Board>> => await Board.findByPk(id),
-    userBoards: async (_parent, { userId }): Promise<Board[]> =>
-      await Board.findAll({ where: { userId } }),
-    allBoards: async (): Promise<Board[]> => await Board.findAll()
+    board: resolver(Board),
+    userBoards: resolver(Board),
+    allBoards: resolver(Board)
   },
   Mutation: {
     addBoard: async (_parent, { input }): Promise<Maybe<Board>> => {

@@ -19,7 +19,7 @@ import Board from "./Board"
 import { Role } from "../types"
 
 @Table
-class User extends Model<User> {
+class User extends Model {
   @PrimaryKey
   @Default(() => shortid.generate())
   @Column
@@ -53,10 +53,10 @@ class User extends Model<User> {
   @Column
   isActive!: boolean
 
-  @HasMany(() => Template as never)
+  @HasMany(() => Template)
   templates!: Template[]
 
-  @HasMany(() => Board as never)
+  @HasMany(() => Board)
   boards!: Board[]
 
   @BeforeCreate

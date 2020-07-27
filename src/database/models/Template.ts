@@ -16,7 +16,7 @@ import User from "./User"
 import Board from "./Board"
 
 @Table
-class Template extends Model<Template> {
+class Template extends Model {
   @PrimaryKey
   @Default(() => shortid.generate())
   @Column
@@ -28,14 +28,14 @@ class Template extends Model<Template> {
   @Column
   name!: string
 
-  @ForeignKey(() => User as never)
+  @ForeignKey(() => User)
   @Column
   authorId!: string
 
-  @BelongsTo(() => User as never)
+  @BelongsTo(() => User)
   author!: User
 
-  @HasMany(() => Board as never)
+  @HasMany(() => Board)
   boards!: Board[]
 }
 

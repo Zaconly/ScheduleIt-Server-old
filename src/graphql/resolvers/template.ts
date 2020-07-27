@@ -1,15 +1,15 @@
-import { Template } from "../../database/models"
+import { Template } from "../../database"
 import { Resolvers, Maybe } from "../types"
 import { Context } from "../context"
 import { ServerError } from "../errors"
 import { logger } from "../../utils"
+import { resolver } from "graphql-sequelize"
 
 const templateResolver: Resolvers<Context> = {
   Query: {
-    template: async (_parent, { id }): Promise<Maybe<Template>> => await Template.findByPk(id),
-    authorTemplates: async (_parent, { authorId }): Promise<Template[]> =>
-      await Template.findAll({ where: { authorId } }),
-    allTemplates: async (): Promise<Template[]> => await Template.findAll()
+    template: resolver(Template),
+    authorTemplates: resolver(Template),
+    allTemplates: resolver(Template)
   },
   Mutation: {
     addTemplate: async (_parent, { input }): Promise<Maybe<Template>> => {

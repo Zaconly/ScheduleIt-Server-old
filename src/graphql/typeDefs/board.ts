@@ -22,8 +22,9 @@ const boardSchema = gql`
   type Board {
     id: ID!
     name: String!
-    icon: String
     template: Template
+    tasks: [Task!]
+    icon: String
     isArchived: Boolean!
     createdAt: DateTime
     updatedAt: DateTime

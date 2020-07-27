@@ -2,7 +2,7 @@ import shortid from "shortid"
 import { Model, PrimaryKey, Default, Column, Table, IsEmail } from "sequelize-typescript"
 
 @Table
-class ResetToken extends Model<ResetToken> {
+class ResetToken extends Model {
   @PrimaryKey
   @Default(() => shortid.generate())
   @Column

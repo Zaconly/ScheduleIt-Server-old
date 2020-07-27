@@ -16,7 +16,7 @@ import Template from "./Template"
 import Task from "./Task"
 
 @Table
-class Board extends Model<Board> {
+class Board extends Model {
   @PrimaryKey
   @Default(() => shortid.generate())
   @Column
@@ -34,21 +34,21 @@ class Board extends Model<Board> {
   @Column
   isArchived!: boolean
 
-  @ForeignKey(() => User as never)
+  @ForeignKey(() => User)
   @Column
   userId!: string
 
-  @BelongsTo(() => User as never)
+  @BelongsTo(() => User)
   user!: User
 
-  @ForeignKey(() => Template as never)
+  @ForeignKey(() => Template)
   @Column
   templateId!: string
 
-  @BelongsTo(() => Template as never)
+  @BelongsTo(() => Template)
   template!: Template
 
-  @HasMany(() => Task as never)
+  @HasMany(() => Task)
   tasks!: Task[]
 }
 

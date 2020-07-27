@@ -2,20 +2,16 @@ import { gql } from "apollo-server-express"
 
 const authSchema = gql`
   extend type Query {
-    me: AuthPayload!
+    me: User!
   }
 
   extend type Mutation {
-    login(input: LoginInput!): AuthPayload!
-    register(input: RegisterInput!): AuthPayload!
+    login(input: LoginInput!): User!
+    register(input: RegisterInput!): User!
     logout: Boolean!
     forgotPassword(email: String!): Boolean!
     resetPassword(token: String!, email: String!, newPassword: String!): Boolean!
     changePassword(oldPassword: String!, newPassword: String!): Boolean!
-  }
-
-  type AuthPayload {
-    me: User!
   }
 
   input LoginInput {

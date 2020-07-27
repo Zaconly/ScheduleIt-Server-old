@@ -1,23 +1,15 @@
-import { Task, Board } from "../../database/models"
+import { Task } from "../../database"
 import { Resolvers, Maybe } from "../types"
 import { Context } from "../context"
 import { ServerError } from "../errors"
 import { logger } from "../../utils"
+import { resolver } from "graphql-sequelize"
 
 const TaskResolver: Resolvers<Context> = {
   Query: {
-    task: async (_parent, { id }): Promise<Maybe<Task>> => await Task.findByPk(id),
-    boardTasks: async (_parent, { boardId }): Promise<Task[]> =>
-      await Task.findAll({ where: { boardId } }),
-    userTasks: async (_parent, _args, { me }): Promise<Task[]> =>
-      await Task.findAll({
-        include: [
-          {
-            model: Board as never,
-            where: { userId: me?.id }
-          }
-        ]
-      })
+    task: resolver(Task),
+    boardTasks: resolver(Task),
+    userTasks: resolver(Task)
   },
   Mutation: {
     addTask: async (_parent, { boardId, input }): Promise<Maybe<Task>> => {

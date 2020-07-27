@@ -6,7 +6,7 @@ import { logger } from ".."
 
 const transporter = nodemailer.createTransport({
   host: process.env.MAIL_HOST || "localhost",
-  port: (process.env.MAIL_PORT as unknown) as number,
+  port: +process.env.MAIL_PORT,
   ignoreTLS: true
 })
 

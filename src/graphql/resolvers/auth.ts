@@ -1,26 +1,40 @@
-import { User, ResetToken } from "../../database/models"
+import { User, ResetToken } from "../../database"
 import { Op, fn } from "sequelize"
 import cryto from "crypto"
-import { Resolvers, AuthPayload } from "../types"
+import { Resolvers, User as UserType } from "../types"
 import { ApolloError } from "apollo-server-express"
 import { Context } from "../context"
 import { ServerError, TokenError, NotFoundError } from "../errors"
 import { logger } from "../../utils"
+import { resolver } from "graphql-sequelize"
+import { EXPECTED_OPTIONS_KEY } from "dataloader-sequelize"
+
+resolver.contextToOptions = { [EXPECTED_OPTIONS_KEY]: EXPECTED_OPTIONS_KEY }
 
 const authResolver: Resolvers<Context> = {
-  Query: {},
+  Query: {
+    me: resolver(User, {
+      before: (findOptions, _args, { me }) => {
+        findOptions.where = {
+          id: me.id
+        }
+
+        return findOptions
+      }
+    })
+  },
   Mutation: {
     login: async (
       _parent,
       { input: { identifier, password } },
       { authenticate, login }
-    ): Promise<AuthPayload> => {
+    ): Promise<UserType> => {
       const { user } = await authenticate("graphql-local", { username: identifier, password })
       login(user)
 
-      return { me: user }
+      return user
     },
-    register: async (_parent, { input }, { authenticate, login }): Promise<AuthPayload> => {
+    register: async (_parent, { input }, { authenticate, login }): Promise<UserType> => {
       await User.create(input)
 
       const { user } = await authenticate("graphql-local", {
@@ -30,7 +44,7 @@ const authResolver: Resolvers<Context> = {
 
       login(user)
 
-      return { me: user }
+      return user
     },
     logout: async (_parent, _args, { logout }): Promise<boolean> => {
       try {

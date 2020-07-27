@@ -13,7 +13,7 @@ import {
 import Board from "./Board"
 
 @Table
-class Task extends Model<Task> {
+class Task extends Model {
   @PrimaryKey
   @Default(() => shortid.generate())
   @Column
@@ -34,11 +34,11 @@ class Task extends Model<Task> {
   @Column
   endDate?: Date
 
-  @ForeignKey(() => Board as never)
+  @ForeignKey(() => Board)
   @Column
   boardId!: string
 
-  @BelongsTo(() => Board as never)
+  @BelongsTo(() => Board)
   board!: Board
 }
 
