@@ -5,7 +5,10 @@ import { ServerError } from "../errors"
 import { logger } from "../../utils"
 import { resolver } from "graphql-sequelize"
 
-const TaskResolver: Resolvers<Context> = {
+const taskResolver: Resolvers<Context> = {
+  Task: {
+    tags: resolver(Task.associations.tags)
+  },
   Query: {
     task: resolver(Task),
     boardTasks: resolver(Task),
@@ -39,4 +42,4 @@ const TaskResolver: Resolvers<Context> = {
   }
 }
 
-export default TaskResolver
+export default taskResolver

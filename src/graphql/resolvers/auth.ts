@@ -14,12 +14,9 @@ resolver.contextToOptions = { [EXPECTED_OPTIONS_KEY]: EXPECTED_OPTIONS_KEY }
 const authResolver: Resolvers<Context> = {
   Query: {
     me: resolver(User, {
-      before: (findOptions, _args, { me }) => {
-        findOptions.where = {
-          id: me.id
-        }
-
-        return findOptions
+      before: (options, _args, { me }) => {
+        options.where = { id: me.id }
+        return options
       }
     })
   },

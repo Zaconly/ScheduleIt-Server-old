@@ -4,16 +4,16 @@ import { User } from "./database/models"
 import { User as UserType } from "./graphql/types"
 import { CredentialsError } from "./graphql/errors"
 
-type Callback = (err: string | Error, user: UserType | UserType["id"]) => void
+type Callback = (err: string | Error | null, user: UserType | UserType["id"] | null) => void
 
 export default (passport: PassportStatic) => {
   passport.use(
-    new GraphQLLocalStrategy(async (identifier: string, password: string, done: Callback) => {
-      const user = await User.findByIdentifier(identifier)
-      let error = new CredentialsError()
+    new GraphQLLocalStrategy(async (identifier: unknown, password: unknown, done: Callback) => {
+      const user = await User.findByIdentifier(identifier as string)
+      let error: CredentialsError | null = new CredentialsError()
 
       if (user) {
-        const isValid = await user.validatePassword(password)
+        const isValid = await user.validatePassword(password as string)
 
         if (isValid) error = null
       }

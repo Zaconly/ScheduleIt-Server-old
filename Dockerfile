@@ -7,9 +7,8 @@ WORKDIR /app
 COPY yarn.lock ./
 COPY package.json ./
 
+# Need to build with development packages for Typescript
 RUN yarn
-# Crypto is not included in Alpine version
-RUN yarn add crypto
 
 COPY . .
 

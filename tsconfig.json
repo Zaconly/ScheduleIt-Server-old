@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "strict": false,
+    "strict": true,
     "target": "ES2018",
     "lib": ["es6"],
     "module": "CommonJS",

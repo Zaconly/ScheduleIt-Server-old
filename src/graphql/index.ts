@@ -10,16 +10,16 @@ import { Context } from "./context"
 import { Maybe, User } from "./types"
 import sequelize from "../database"
 
-const { REDIS_PORT, REDIS_HOST = "localhost" } = process.env
+const { REDIS_PORT, REDIS_HOST = "localhost", NODE_ENV } = process.env
 
 export default new ApolloServer({
   schema,
   cache: new RedisCache({
     host: REDIS_HOST,
-    port: REDIS_HOST === "localhost" ? +REDIS_PORT : undefined
+    port: REDIS_HOST === "localhost" ? ((REDIS_PORT as unknown) as number) : undefined
   }),
   cacheControl: {
-    defaultMaxAge: 30
+    defaultMaxAge: NODE_ENV === "production" ? 30 : 0
   },
   context: async ({ req, res }): Promise<Context> =>
     // @ts-ignore

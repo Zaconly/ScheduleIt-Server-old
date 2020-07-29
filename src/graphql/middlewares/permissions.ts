@@ -1,9 +1,9 @@
-import { shield, rule, not, or, chain } from "graphql-shield"
+import { shield, rule, not, chain, race } from "graphql-shield"
 import { applyMiddleware } from "graphql-middleware"
 import { makeExecutableSchema, ApolloError, ForbiddenError } from "apollo-server-express"
 import typeDefs from "../typeDefs"
 import resolvers from "../resolvers"
-import { Board, Task, Template } from "../../database/models"
+import { Board, Task, Tag, Template } from "../../database"
 
 const AuthenticatedError = new ApolloError("You must be logout to do this action", "AUTHENTICATED")
 
@@ -16,18 +16,42 @@ const isBoardOwner = rule()(async (_parent, args, { me }) => {
   return !!board
 })
 
-const isTaskOwner = rule()(async (_parent, { id }, { me }) => {
+const isTaskOwner = rule()(async (_parent, args, { me }) => {
   const task = await Task.findOne({
-    where: { id },
+    where: { id: args.id || args.taskId },
     include: [
       {
-        model: Board as never,
-        where: { userId: me.id }
+        model: Board,
+        where: { userId: me.id },
+        required: true
       }
     ]
   })
 
   return !!task
+})
+
+const isTagOwner = rule()(async (_parent, { id }, { me }) => {
+  const tag = await Tag.findOne({
+    where: { id },
+    include: [
+      {
+        model: Task,
+        attributes: [],
+        required: true,
+        include: [
+          {
+            model: Board,
+            attributes: [],
+            where: { userId: me.id },
+            required: true
+          }
+        ]
+      }
+    ]
+  })
+
+  return !!tag
 })
 
 const isTemplateOwner = rule()(async (_parent, { id }, { me }) => {
@@ -39,17 +63,20 @@ const permissions = shield(
   {
     Query: {
       me: isAuth,
-      board: chain(isAuth, or(isAdmin, isBoardOwner)),
+      board: chain(isAuth, race(isAdmin, isBoardOwner)),
       userBoards: chain(isAuth, isAdmin),
       allBoards: chain(isAuth, isAdmin),
-      task: chain(isAuth, or(isAdmin, isTaskOwner)),
-      boardTasks: chain(isAuth, or(isAdmin, isBoardOwner)),
+      task: chain(isAuth, race(isAdmin, isTaskOwner)),
+      boardTasks: chain(isAuth, race(isAdmin, isBoardOwner)),
       userTasks: isAuth,
       template: isAuth,
       authorTemplates: isAuth,
       allTemplates: isAuth,
       user: chain(isAuth, isAdmin),
-      allUsers: chain(isAuth, isAdmin)
+      allUsers: chain(isAuth, isAdmin),
+      tag: chain(isAuth, race(isAdmin, isTagOwner)),
+      tagTasks: chain(isAuth, race(isAdmin, isTagOwner)),
+      taskTags: chain(isAuth, race(isAdmin, isTaskOwner))
     },
     Mutation: {
       login: not(isAuth, AuthenticatedError),
@@ -58,20 +85,21 @@ const permissions = shield(
       resetPassword: not(isAuth, AuthenticatedError),
       changePassword: isAuth,
       addBoard: isAuth,
-      updateBoard: chain(isAuth, or(isAdmin, isBoardOwner)),
-      deleteBoard: chain(isAuth, or(isAdmin, isBoardOwner)),
+      updateBoard: chain(isAuth, race(isAdmin, isBoardOwner)),
+      deleteBoard: chain(isAuth, race(isAdmin, isBoardOwner)),
       addTask: isAuth,
-      updateTask: chain(isAuth, or(isAdmin, isTaskOwner)),
-      deleteTask: chain(isAuth, or(isAdmin, isTaskOwner)),
+      updateTask: chain(isAuth, race(isAdmin, isTaskOwner)),
+      deleteTask: chain(isAuth, race(isAdmin, isTaskOwner)),
       addTemplate: isAuth,
-      updateTemplate: chain(isAuth, or(isAdmin, isTemplateOwner)),
-      deleteTemplate: chain(isAuth, or(isAdmin, isTemplateOwner)),
+      updateTemplate: chain(isAuth, race(isAdmin, isTemplateOwner)),
+      deleteTemplate: chain(isAuth, race(isAdmin, isTemplateOwner)),
       addUser: chain(isAuth, isAdmin),
       updateUser: chain(isAuth, isAdmin),
       deleteUser: chain(isAuth, isAdmin)
     },
     Board: isAuth,
     Task: isAuth,
+    Tag: isAuth,
     Template: isAuth
   },
   {

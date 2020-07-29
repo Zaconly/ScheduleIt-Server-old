@@ -26,6 +26,15 @@ To generate types after GraphQL Schema modification (src/graphql/typeDefs/):
 yarn generate
 ```
 
+To generate fake data:
+
+```bash
+yarn feker:gen
+
+# To delete all data
+yarn faker:clean
+```
+
 To access development MailDev server, go to [http://localhost:1080](http://localhost:1080)
 
 Use [http://localhost:4000/graphql](http://localhost:4000/graphql) to interact with GraphQL server.

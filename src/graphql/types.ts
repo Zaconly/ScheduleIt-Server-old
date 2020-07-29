@@ -25,7 +25,10 @@ export type Query = {
   board?: Maybe<Board>
   boardTasks?: Maybe<Array<Task>>
   me: User
+  tag?: Maybe<Tag>
+  tagTasks?: Maybe<Array<Task>>
   task?: Maybe<Task>
+  taskTags?: Maybe<Array<Tag>>
   template?: Maybe<Template>
   user?: Maybe<User>
   userBoards?: Maybe<Array<Board>>
@@ -44,8 +47,20 @@ export type QueryBoardTasksArgs = {
   boardId: Scalars["ID"]
 }
 
+export type QueryTagArgs = {
+  id: Scalars["ID"]
+}
+
+export type QueryTagTasksArgs = {
+  id: Scalars["ID"]
+}
+
 export type QueryTaskArgs = {
   id: Scalars["ID"]
+}
+
+export type QueryTaskTagsArgs = {
+  taskId: Scalars["ID"]
 }
 
 export type QueryTemplateArgs = {
@@ -193,6 +208,13 @@ export type Subscription = {
   _?: Maybe<Scalars["Boolean"]>
 }
 
+export type Tag = {
+  __typename?: "Tag"
+  id: Scalars["ID"]
+  name: Scalars["String"]
+  color?: Maybe<Scalars["String"]>
+}
+
 export type TaskInput = {
   name: Scalars["String"]
   isCompleted: Scalars["Boolean"]
@@ -208,6 +230,7 @@ export type Task = {
   startDate?: Maybe<Scalars["DateTime"]>
   endDate?: Maybe<Scalars["DateTime"]>
   board?: Maybe<Board>
+  tags?: Maybe<Array<Tag>>
   createdAt?: Maybe<Scalars["DateTime"]>
   updatedAt?: Maybe<Scalars["DateTime"]>
 }
@@ -360,6 +383,7 @@ export type ResolversTypes = ResolversObject<{
   Date: ResolverTypeWrapper<Scalars["Date"]>
   Time: ResolverTypeWrapper<Scalars["Time"]>
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]>
+  Tag: ResolverTypeWrapper<Tag>
   TaskInput: TaskInput
   Task: ResolverTypeWrapper<Task>
   TemplateInput: TemplateInput
@@ -385,6 +409,7 @@ export type ResolversParentTypes = ResolversObject<{
   Date: Scalars["Date"]
   Time: Scalars["Time"]
   DateTime: Scalars["DateTime"]
+  Tag: Tag
   TaskInput: TaskInput
   Task: Task
   TemplateInput: TemplateInput
@@ -421,11 +446,29 @@ export type QueryResolvers<
     RequireFields<QueryBoardTasksArgs, "boardId">
   >
   me?: Resolver<ResolversTypes["User"], ParentType, ContextType>
+  tag?: Resolver<
+    Maybe<ResolversTypes["Tag"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryTagArgs, "id">
+  >
+  tagTasks?: Resolver<
+    Maybe<Array<ResolversTypes["Task"]>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryTagTasksArgs, "id">
+  >
   task?: Resolver<
     Maybe<ResolversTypes["Task"]>,
     ParentType,
     ContextType,
     RequireFields<QueryTaskArgs, "id">
+  >
+  taskTags?: Resolver<
+    Maybe<Array<ResolversTypes["Tag"]>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryTaskTagsArgs, "taskId">
   >
   template?: Resolver<
     Maybe<ResolversTypes["Template"]>,
@@ -593,6 +636,16 @@ export interface DateTimeScalarConfig
   name: "DateTime"
 }
 
+export type TagResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Tag"] = ResolversParentTypes["Tag"]
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  color?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>
+}>
+
 export type TaskResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Task"] = ResolversParentTypes["Task"]
@@ -603,6 +656,7 @@ export type TaskResolvers<
   startDate?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   endDate?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   board?: Resolver<Maybe<ResolversTypes["Board"]>, ParentType, ContextType>
+  tags?: Resolver<Maybe<Array<ResolversTypes["Tag"]>>, ParentType, ContextType>
   createdAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   updatedAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
@@ -643,6 +697,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Date?: GraphQLScalarType
   Time?: GraphQLScalarType
   DateTime?: GraphQLScalarType
+  Tag?: TagResolvers<ContextType>
   Task?: TaskResolvers<ContextType>
   Template?: TemplateResolvers<ContextType>
   User?: UserResolvers<ContextType>

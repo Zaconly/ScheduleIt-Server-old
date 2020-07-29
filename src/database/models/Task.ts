@@ -8,9 +8,12 @@ import {
   Table,
   ForeignKey,
   BelongsTo,
-  AllowNull
+  AllowNull,
+  BelongsToMany
 } from "sequelize-typescript"
 import Board from "./Board"
+import TaskTag from "./TaskTag"
+import Tag from "./Tag"
 
 @Table
 class Task extends Model {
@@ -40,6 +43,9 @@ class Task extends Model {
 
   @BelongsTo(() => Board)
   board!: Board
+
+  @BelongsToMany(() => Tag, () => TaskTag)
+  tags!: Array<Tag & { TaskTag: TaskTag }>
 }
 
 export default Task

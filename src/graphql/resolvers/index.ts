@@ -2,8 +2,9 @@ import { GraphQLDate, GraphQLTime, GraphQLDateTime } from "graphql-iso-date"
 import userResolver from "./user"
 import authResolver from "./auth"
 import boardResolver from "./board"
-import TaskResolver from "./task"
+import taskResolver from "./task"
 import templateResolver from "./template"
+import tagResolver from "./tag"
 
 const scalarResolver = {
   Date: GraphQLDate,
@@ -17,5 +18,6 @@ export default [
   authResolver,
   templateResolver,
   boardResolver,
-  TaskResolver
+  taskResolver,
+  tagResolver
 ]

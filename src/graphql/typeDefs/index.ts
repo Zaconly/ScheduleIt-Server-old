@@ -4,6 +4,7 @@ import authSchema from "./auth"
 import boardSchema from "./board"
 import taskSchema from "./task"
 import templateSchema from "./template"
+import tagSchema from "./tag"
 
 const linkSchema = gql`
   type Query {
@@ -23,4 +24,12 @@ const linkSchema = gql`
   scalar DateTime
 `
 
-export default [linkSchema, userSchema, authSchema, templateSchema, boardSchema, taskSchema]
+export default [
+  linkSchema,
+  userSchema,
+  authSchema,
+  templateSchema,
+  boardSchema,
+  taskSchema,
+  tagSchema
+]

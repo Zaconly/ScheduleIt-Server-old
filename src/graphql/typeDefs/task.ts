@@ -27,6 +27,7 @@ const taskSchema = gql`
     startDate: DateTime
     endDate: DateTime
     board: Board
+    tags: [Tag!]
     createdAt: DateTime
     updatedAt: DateTime
   }

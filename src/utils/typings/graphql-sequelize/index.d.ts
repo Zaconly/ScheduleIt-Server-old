@@ -12,11 +12,11 @@ declare module "graphql-sequelize" {
   } from "graphql"
 
   export type IBeforeFn<TContext> = (
-    options: IBeforeFnProps,
+    options: Sequelize.FindOptions,
     args,
     context: TContext,
     info: GraphQLResolveInfo
-  ) => IBeforeFnProps
+  ) => Sequelize.FindOptions
   export type IAfterFn<TContext> = <T>(
     result: T,
     args,
@@ -26,11 +26,6 @@ declare module "graphql-sequelize" {
 
   interface IMapType {
     [k: string]: string
-  }
-
-  interface IBeforeFnProps {
-    where?: { [key: string]: any }
-    order?: string[][]
   }
 
   export interface IAttributeOptions<TInstance, TAttributes> {

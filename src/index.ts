@@ -1,6 +1,7 @@
 import express from "express"
 import compression from "compression"
 import helmet from "helmet"
+import cors from "cors"
 import passport from "passport"
 import session from "express-session"
 import store from "connect-redis"
@@ -19,6 +20,13 @@ initialiseSession(passport)
 
 const app = express()
 
+app.use(
+  cors({
+    origin: "*",
+    methods: ["POST"],
+    credentials: true
+  })
+)
 app.use(compression())
 app.use(helmet())
 
