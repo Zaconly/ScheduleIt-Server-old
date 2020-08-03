@@ -1,9 +1,10 @@
+import { resolver } from "graphql-sequelize"
+
 import { Template } from "../../database"
-import { Resolvers, Maybe } from "../types"
+import { logger } from "../../utils"
 import { Context } from "../context"
 import { ServerError } from "../errors"
-import { logger } from "../../utils"
-import { resolver } from "graphql-sequelize"
+import { Maybe, Resolvers } from "../types"
 
 const templateResolver: Resolvers<Context> = {
   Query: {

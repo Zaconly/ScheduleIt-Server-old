@@ -1,19 +1,20 @@
-import shortid from "shortid"
 import {
+  AllowNull,
+  BelongsTo,
+  Column,
+  Default,
+  ForeignKey,
+  HasMany,
+  Length,
   Model,
   PrimaryKey,
-  Default,
-  Column,
-  Length,
-  Table,
-  ForeignKey,
-  BelongsTo,
-  AllowNull,
-  HasMany
+  Table
 } from "sequelize-typescript"
-import User from "./User"
-import Template from "./Template"
+import shortid from "shortid"
+
 import Task from "./Task"
+import Template from "./Template"
+import User from "./User"
 
 @Table
 class Board extends Model {

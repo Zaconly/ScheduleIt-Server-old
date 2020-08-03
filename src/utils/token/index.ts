@@ -1,9 +1,10 @@
-import jwt from "jsonwebtoken"
 import crypto from "crypto"
 import { Request } from "express"
-import { Maybe } from "../../graphql/types"
-import { AccessTokenPayload, TokenPayload, TokenType, DecodedData } from "./types"
+import jwt from "jsonwebtoken"
+
 import { TokenError } from "../../graphql/errors"
+import { Maybe } from "../../graphql/types"
+import { AccessTokenPayload, DecodedData, TokenPayload, TokenType } from "./types"
 
 /**
  * Create a new JWT access token

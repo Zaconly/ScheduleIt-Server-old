@@ -1,9 +1,10 @@
-import { shield, rule, not, chain, race } from "graphql-shield"
+import { ApolloError, ForbiddenError, makeExecutableSchema } from "apollo-server-express"
 import { applyMiddleware } from "graphql-middleware"
-import { makeExecutableSchema, ApolloError, ForbiddenError } from "apollo-server-express"
-import typeDefs from "../typeDefs"
+import { chain, not, race, rule, shield } from "graphql-shield"
+
+import { Board, Tag, Task, Template } from "../../database"
 import resolvers from "../resolvers"
-import { Board, Task, Tag, Template } from "../../database"
+import typeDefs from "../typeDefs"
 
 const AuthenticatedError = new ApolloError("You must be logout to do this action", "AUTHENTICATED")
 

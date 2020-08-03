@@ -1,19 +1,20 @@
-import shortid from "shortid"
 import {
+  AllowNull,
+  BelongsTo,
+  BelongsToMany,
+  Column,
+  Default,
+  ForeignKey,
+  Length,
   Model,
   PrimaryKey,
-  Default,
-  Column,
-  Length,
-  Table,
-  ForeignKey,
-  BelongsTo,
-  AllowNull,
-  BelongsToMany
+  Table
 } from "sequelize-typescript"
+import shortid from "shortid"
+
 import Board from "./Board"
-import TaskTag from "./TaskTag"
 import Tag from "./Tag"
+import TaskTag from "./TaskTag"
 
 @Table
 class Task extends Model {

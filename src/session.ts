@@ -1,8 +1,9 @@
-import { PassportStatic } from "passport"
 import { GraphQLLocalStrategy } from "graphql-passport"
+import { PassportStatic } from "passport"
+
 import { User } from "./database/models"
-import { User as UserType } from "./graphql/types"
 import { CredentialsError } from "./graphql/errors"
+import { User as UserType } from "./graphql/types"
 
 type Callback = (err: string | Error | null, user: UserType | UserType["id"] | null) => void
 

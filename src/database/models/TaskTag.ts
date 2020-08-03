@@ -1,7 +1,8 @@
+import { Column, Default, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript"
 import shortid from "shortid"
-import { Model, PrimaryKey, Default, Column, Table, ForeignKey } from "sequelize-typescript"
-import Task from "./Task"
+
 import Tag from "./Tag"
+import Task from "./Task"
 
 @Table({ timestamps: false })
 class TaskTag extends Model {

@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize-typescript"
-import { User, Template, Board, Task, ResetToken, Tag, TaskTag } from "./models"
+
+import { Board, ResetToken, Tag, Task, TaskTag, Template, User } from "./models"
 
 const { DB_USER, DB_PWD, DB_NAME, DB_PORT, DB_HOST = "localhost" } = process.env
 

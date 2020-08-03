@@ -1,10 +1,11 @@
 import { gql } from "apollo-server-express"
-import userSchema from "./user"
+
 import authSchema from "./auth"
 import boardSchema from "./board"
+import tagSchema from "./tag"
 import taskSchema from "./task"
 import templateSchema from "./template"
-import tagSchema from "./tag"
+import userSchema from "./user"
 
 const linkSchema = gql`
   type Query {

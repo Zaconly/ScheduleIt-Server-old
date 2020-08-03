@@ -1,9 +1,10 @@
-import { User } from "../../database"
-import { Resolvers, Maybe } from "../types"
-import { Context } from "../context"
-import { logger } from "../../utils"
-import { ServerError } from "../errors"
 import { resolver } from "graphql-sequelize"
+
+import { User } from "../../database"
+import { logger } from "../../utils"
+import { Context } from "../context"
+import { ServerError } from "../errors"
+import { Maybe, Resolvers } from "../types"
 
 const userResolver: Resolvers<Context> = {
   User: {

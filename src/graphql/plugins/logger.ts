@@ -1,4 +1,5 @@
 import { ApolloServerPlugin } from "apollo-server-plugin-base"
+
 import { logger } from "../../utils"
 
 const loggerPlugin: ApolloServerPlugin = {

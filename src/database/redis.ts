@@ -1,4 +1,5 @@
 import Redis from "ioredis"
+
 import { logger } from "../utils"
 
 const { REDIS_PORT, REDIS_HOST = "localhost" } = process.env

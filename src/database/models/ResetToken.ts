@@ -1,5 +1,5 @@
+import { Column, Default, IsEmail, Model, PrimaryKey, Table } from "sequelize-typescript"
 import shortid from "shortid"
-import { Model, PrimaryKey, Default, Column, Table, IsEmail } from "sequelize-typescript"
 
 @Table
 class ResetToken extends Model {

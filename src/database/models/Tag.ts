@@ -1,14 +1,15 @@
-import shortid from "shortid"
 import {
+  AllowNull,
+  BelongsToMany,
+  Column,
+  Default,
+  Length,
   Model,
   PrimaryKey,
-  Default,
-  Column,
-  Length,
-  Table,
-  AllowNull,
-  BelongsToMany
+  Table
 } from "sequelize-typescript"
+import shortid from "shortid"
+
 import Task from "./Task"
 import TaskTag from "./TaskTag"
 

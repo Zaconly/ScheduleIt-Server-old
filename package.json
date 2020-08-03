@@ -14,8 +14,8 @@
     "generate": "graphql-codegen --config codegen.yml",
     "faker:gen": "sequelize-cli db:seed:all --debug",
     "faker:clean": "sequelize-cli db:seed:undo:all",
-    "prettify": "prettier --write \"src/**/*.ts\"",
-    "lint": "eslint"
+    "lint": "eslint --fix .",
+    "format": "prettier --write \"./src/**/*.{ts,json}\""
   },
   "dependencies": {
     "apollo-server-cache-redis": "^1.2.2",
@@ -94,8 +94,7 @@
   },
   "lint-staged": {
     "src/**/*.{ts,json}": [
-      "yarn lint",
-      "yarn prettify"
+      "yarn lint"
     ]
   }
 }

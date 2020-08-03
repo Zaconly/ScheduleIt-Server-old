@@ -1,7 +1,8 @@
+import { Response } from "express"
+import { PassportContext } from "graphql-passport"
+
 import { Mailer } from "../utils/mail"
 import { Maybe, User } from "./types"
-import { PassportContext } from "graphql-passport"
-import { Response } from "express"
 
 interface Credentials {
   username: string

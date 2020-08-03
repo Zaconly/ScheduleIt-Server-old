@@ -1,14 +1,15 @@
-import { ApolloServer } from "apollo-server-express"
 import { RedisCache } from "apollo-server-cache-redis"
+import { ApolloServer } from "apollo-server-express"
 import responseCachePlugin from "apollo-server-plugin-response-cache"
-import { buildContext } from "graphql-passport"
 import { createContext, EXPECTED_OPTIONS_KEY } from "dataloader-sequelize"
-import schema from "./middlewares/permissions"
-import { mailer } from "../utils"
-import loggerPlugin from "./plugins/logger"
-import { Context } from "./context"
-import { Maybe, User } from "./types"
+import { buildContext } from "graphql-passport"
+
 import sequelize from "../database"
+import { mailer } from "../utils"
+import { Context } from "./context"
+import schema from "./middlewares/permissions"
+import loggerPlugin from "./plugins/logger"
+import { Maybe, User } from "./types"
 
 const { REDIS_PORT, REDIS_HOST = "localhost", NODE_ENV } = process.env
 

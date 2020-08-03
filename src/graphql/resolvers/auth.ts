@@ -1,13 +1,14 @@
-import { User, ResetToken } from "../../database"
-import { Op, fn } from "sequelize"
-import cryto from "crypto"
-import { Resolvers, User as UserType } from "../types"
 import { ApolloError } from "apollo-server-express"
-import { Context } from "../context"
-import { ServerError, TokenError, NotFoundError } from "../errors"
-import { logger } from "../../utils"
-import { resolver } from "graphql-sequelize"
+import cryto from "crypto"
 import { EXPECTED_OPTIONS_KEY } from "dataloader-sequelize"
+import { resolver } from "graphql-sequelize"
+import { fn, Op } from "sequelize"
+
+import { ResetToken, User } from "../../database"
+import { logger } from "../../utils"
+import { Context } from "../context"
+import { NotFoundError, ServerError, TokenError } from "../errors"
+import { Resolvers, User as UserType } from "../types"
 
 resolver.contextToOptions = { [EXPECTED_OPTIONS_KEY]: EXPECTED_OPTIONS_KEY }
 

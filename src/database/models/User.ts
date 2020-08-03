@@ -1,22 +1,23 @@
-import shortid from "shortid"
 import bcrypt from "bcryptjs"
 import {
+  AllowNull,
+  BeforeCreate,
+  Column,
+  Default,
+  HasMany,
+  IsAlphanumeric,
+  IsEmail,
+  Length,
   Model,
   PrimaryKey,
-  Default,
-  Column,
-  Unique,
-  IsAlphanumeric,
-  Length,
-  IsEmail,
   Table,
-  HasMany,
-  AllowNull,
-  BeforeCreate
+  Unique
 } from "sequelize-typescript"
-import Template from "./Template"
-import Board from "./Board"
+import shortid from "shortid"
+
 import { Role } from "../types"
+import Board from "./Board"
+import Template from "./Template"
 
 @Table
 class User extends Model {

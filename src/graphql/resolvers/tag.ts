@@ -1,7 +1,8 @@
-import { Tag, Task } from "../../database"
-import { Resolvers } from "../types"
-import { Context } from "../context"
 import { resolver } from "graphql-sequelize"
+
+import { Tag, Task } from "../../database"
+import { Context } from "../context"
+import { Resolvers } from "../types"
 
 const tagResolver: Resolvers<Context> = {
   Query: {

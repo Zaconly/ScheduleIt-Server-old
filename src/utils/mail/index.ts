@@ -1,8 +1,9 @@
 import nodemailer from "nodemailer"
 import hbs from "nodemailer-express-handlebars"
 import path from "path"
-import constants from "./constants"
+
 import { logger } from ".."
+import constants from "./constants"
 
 const transporter = nodemailer.createTransport({
   host: process.env.MAIL_HOST || "localhost",

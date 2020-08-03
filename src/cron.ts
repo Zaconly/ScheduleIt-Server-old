@@ -1,7 +1,8 @@
 import cron from "node-cron"
-import { logger } from "./utils"
+import { fn, Op } from "sequelize"
+
 import { ResetToken } from "./database/models"
-import { Op, fn } from "sequelize"
+import { logger } from "./utils"
 
 export default () => {
   /**
