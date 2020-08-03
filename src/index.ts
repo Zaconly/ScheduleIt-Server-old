@@ -15,18 +15,16 @@ import { logger } from "./utils"
 
 const PORT = process.env.PORT || 4000
 const RedisStore = store(session)
+const corsOptions = {
+  origin: ["http://localhost:5500", "http://localhost:3000"],
+  credentials: true
+}
 
 initialiseSession(passport)
 
 const app = express()
 
-app.use(
-  cors({
-    origin: "*",
-    methods: ["POST"],
-    credentials: true
-  })
-)
+app.use(cors(corsOptions))
 app.use(compression())
 app.use(helmet())
 
@@ -48,7 +46,7 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
-server.applyMiddleware({ app })
+server.applyMiddleware({ app, cors: corsOptions })
 
 sequelize
   .sync({ force: false })
