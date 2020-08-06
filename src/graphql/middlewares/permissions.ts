@@ -97,11 +97,7 @@ const permissions = shield(
       addUser: chain(isAuth, isAdmin),
       updateUser: chain(isAuth, isAdmin),
       deleteUser: chain(isAuth, isAdmin)
-    },
-    Board: isAuth,
-    Task: isAuth,
-    Tag: isAuth,
-    Template: isAuth
+    }
   },
   {
     fallbackError: errThrown => {

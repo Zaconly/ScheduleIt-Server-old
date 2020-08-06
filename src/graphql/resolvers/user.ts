@@ -4,7 +4,7 @@ import { User } from "../../database"
 import { logger } from "../../utils"
 import { Context } from "../context"
 import { ServerError } from "../errors"
-import { Maybe, Resolvers } from "../types"
+import { Resolvers } from "../types"
 
 const userResolver: Resolvers<Context> = {
   User: {
@@ -15,12 +15,12 @@ const userResolver: Resolvers<Context> = {
     allUsers: resolver(User)
   },
   Mutation: {
-    addUser: async (_parent, { input }): Promise<Maybe<User>> => {
+    addUser: async (_parent, { input }) => {
       const newUser = await User.create(input)
 
       return newUser
     },
-    updateUser: async (_parent, { id, input }): Promise<Maybe<User>> => {
+    updateUser: async (_parent, { id, input }) => {
       if (input.username) {
         await User.update({ username: input.username }, { where: { id } })
       }
@@ -28,7 +28,7 @@ const userResolver: Resolvers<Context> = {
       const updatedUser = await User.findByPk(id)
       return updatedUser
     },
-    deleteUser: async (_parent, { id }): Promise<boolean> => {
+    deleteUser: async (_parent, { id }) => {
       try {
         await User.destroy({ where: { id } })
 

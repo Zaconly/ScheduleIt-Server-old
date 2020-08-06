@@ -10,9 +10,10 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
-  Date: any
-  Time: any
-  DateTime: any
+  Date: Date
+  Time: Date
+  DateTime: Date
+  Void: void
 }
 
 export type Query = {
@@ -82,16 +83,16 @@ export type Mutation = {
   addTask?: Maybe<Task>
   addTemplate?: Maybe<Template>
   addUser?: Maybe<User>
-  changePassword: Scalars["Boolean"]
+  changePassword?: Maybe<Scalars["Void"]>
   deleteBoard?: Maybe<Scalars["Boolean"]>
   deleteTask?: Maybe<Scalars["Boolean"]>
   deleteTemplate?: Maybe<Scalars["Boolean"]>
   deleteUser?: Maybe<Scalars["Boolean"]>
-  forgotPassword: Scalars["Boolean"]
+  forgotPassword?: Maybe<Scalars["Void"]>
   login: User
-  logout: Scalars["Boolean"]
+  logout?: Maybe<Scalars["Void"]>
   register: User
-  resetPassword: Scalars["Boolean"]
+  resetPassword?: Maybe<Scalars["Void"]>
   updateBoard?: Maybe<Board>
   updateTask?: Maybe<Task>
   updateTemplate?: Maybe<Template>
@@ -150,7 +151,6 @@ export type MutationRegisterArgs = {
 
 export type MutationResetPasswordArgs = {
   token: Scalars["String"]
-  email: Scalars["String"]
   newPassword: Scalars["String"]
 }
 
@@ -383,6 +383,7 @@ export type ResolversTypes = ResolversObject<{
   Date: ResolverTypeWrapper<Scalars["Date"]>
   Time: ResolverTypeWrapper<Scalars["Time"]>
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]>
+  Void: ResolverTypeWrapper<Scalars["Void"]>
   Tag: ResolverTypeWrapper<Tag>
   TaskInput: TaskInput
   Task: ResolverTypeWrapper<Task>
@@ -409,6 +410,7 @@ export type ResolversParentTypes = ResolversObject<{
   Date: Scalars["Date"]
   Time: Scalars["Time"]
   DateTime: Scalars["DateTime"]
+  Void: Scalars["Void"]
   Tag: Tag
   TaskInput: TaskInput
   Task: Task
@@ -521,7 +523,7 @@ export type MutationResolvers<
     RequireFields<MutationAddUserArgs, "input">
   >
   changePassword?: Resolver<
-    ResolversTypes["Boolean"],
+    Maybe<ResolversTypes["Void"]>,
     ParentType,
     ContextType,
     RequireFields<MutationChangePasswordArgs, "oldPassword" | "newPassword">
@@ -551,7 +553,7 @@ export type MutationResolvers<
     RequireFields<MutationDeleteUserArgs, "id">
   >
   forgotPassword?: Resolver<
-    ResolversTypes["Boolean"],
+    Maybe<ResolversTypes["Void"]>,
     ParentType,
     ContextType,
     RequireFields<MutationForgotPasswordArgs, "email">
@@ -562,7 +564,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationLoginArgs, "input">
   >
-  logout?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>
+  logout?: Resolver<Maybe<ResolversTypes["Void"]>, ParentType, ContextType>
   register?: Resolver<
     ResolversTypes["User"],
     ParentType,
@@ -570,10 +572,10 @@ export type MutationResolvers<
     RequireFields<MutationRegisterArgs, "input">
   >
   resetPassword?: Resolver<
-    ResolversTypes["Boolean"],
+    Maybe<ResolversTypes["Void"]>,
     ParentType,
     ContextType,
-    RequireFields<MutationResetPasswordArgs, "token" | "email" | "newPassword">
+    RequireFields<MutationResetPasswordArgs, "token" | "newPassword">
   >
   updateBoard?: Resolver<
     Maybe<ResolversTypes["Board"]>,
@@ -634,6 +636,10 @@ export interface TimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export interface DateTimeScalarConfig
   extends GraphQLScalarTypeConfig<ResolversTypes["DateTime"], any> {
   name: "DateTime"
+}
+
+export interface VoidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes["Void"], any> {
+  name: "Void"
 }
 
 export type TagResolvers<
@@ -697,6 +703,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Date?: GraphQLScalarType
   Time?: GraphQLScalarType
   DateTime?: GraphQLScalarType
+  Void?: GraphQLScalarType
   Tag?: TagResolvers<ContextType>
   Task?: TaskResolvers<ContextType>
   Template?: TemplateResolvers<ContextType>

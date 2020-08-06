@@ -8,6 +8,11 @@ generates:
     config:
       useIndexSignature: true
       preResolveTypes: true
+      scalars:
+        DateTime: Date
+        Date: Date
+        Time: Date
+        Void: void
     hooks:
       afterOneFileWrite:
         - prettier --write

@@ -23,6 +23,7 @@ const linkSchema = gql`
   scalar Date
   scalar Time
   scalar DateTime
+  scalar Void
 `
 
 export default [

@@ -8,10 +8,10 @@ const authSchema = gql`
   extend type Mutation {
     login(input: LoginInput!): User!
     register(input: RegisterInput!): User!
-    logout: Boolean!
-    forgotPassword(email: String!): Boolean!
-    resetPassword(token: String!, email: String!, newPassword: String!): Boolean!
-    changePassword(oldPassword: String!, newPassword: String!): Boolean!
+    logout: Void
+    forgotPassword(email: String!): Void
+    resetPassword(token: String!, newPassword: String!): Void
+    changePassword(oldPassword: String!, newPassword: String!): Void
   }
 
   input LoginInput {

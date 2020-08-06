@@ -4,7 +4,7 @@ import { Template } from "../../database"
 import { logger } from "../../utils"
 import { Context } from "../context"
 import { ServerError } from "../errors"
-import { Maybe, Resolvers } from "../types"
+import { Resolvers } from "../types"
 
 const templateResolver: Resolvers<Context> = {
   Query: {
@@ -13,18 +13,18 @@ const templateResolver: Resolvers<Context> = {
     allTemplates: resolver(Template)
   },
   Mutation: {
-    addTemplate: async (_parent, { input }): Promise<Maybe<Template>> => {
+    addTemplate: async (_parent, { input }) => {
       const newTemplate = await Template.create(input)
 
       return newTemplate
     },
-    updateTemplate: async (_parent, { id, input }): Promise<Maybe<Template>> => {
+    updateTemplate: async (_parent, { id, input }) => {
       await Template.update(input, { where: { id } })
 
       const updatedTemplate = await Template.findByPk(id)
       return updatedTemplate
     },
-    deleteTemplate: async (_parent, { id }): Promise<boolean> => {
+    deleteTemplate: async (_parent, { id }) => {
       try {
         await Template.destroy({ where: { id } })
 

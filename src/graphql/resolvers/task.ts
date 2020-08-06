@@ -4,7 +4,7 @@ import { Task } from "../../database"
 import { logger } from "../../utils"
 import { Context } from "../context"
 import { ServerError } from "../errors"
-import { Maybe, Resolvers } from "../types"
+import { Resolvers } from "../types"
 
 const taskResolver: Resolvers<Context> = {
   Task: {
@@ -16,7 +16,7 @@ const taskResolver: Resolvers<Context> = {
     userTasks: resolver(Task)
   },
   Mutation: {
-    addTask: async (_parent, { boardId, input }): Promise<Maybe<Task>> => {
+    addTask: async (_parent, { boardId, input }) => {
       const newTask = await Task.create({
         boardId,
         ...input
@@ -24,13 +24,13 @@ const taskResolver: Resolvers<Context> = {
 
       return newTask
     },
-    updateTask: async (_parent, { id, input }): Promise<Maybe<Task>> => {
+    updateTask: async (_parent, { id, input }) => {
       await Task.update(input, { where: { id } })
 
       const updatedTask = await Task.findByPk(id)
       return updatedTask
     },
-    deleteTask: async (_parent, { id }): Promise<boolean> => {
+    deleteTask: async (_parent, { id }) => {
       try {
         await Task.destroy({ where: { id } })
 

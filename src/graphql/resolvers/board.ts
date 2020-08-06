@@ -4,7 +4,7 @@ import { Board } from "../../database"
 import { logger } from "../../utils"
 import { Context } from "../context"
 import { ServerError } from "../errors"
-import { Maybe, Resolvers } from "../types"
+import { Resolvers } from "../types"
 
 const boardResolver: Resolvers<Context> = {
   Board: {
@@ -16,12 +16,12 @@ const boardResolver: Resolvers<Context> = {
     allBoards: resolver(Board)
   },
   Mutation: {
-    addBoard: async (_parent, { input }): Promise<Maybe<Board>> => {
+    addBoard: async (_parent, { input }) => {
       const newBoard = await Board.create(input)
 
       return newBoard
     },
-    updateBoard: async (_parent, { id, input }): Promise<Maybe<Board>> => {
+    updateBoard: async (_parent, { id, input }) => {
       await Board.update(input, { where: { id } })
 
       const updatedBoard = await Board.findByPk(id)

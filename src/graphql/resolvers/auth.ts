@@ -8,7 +8,7 @@ import { ResetToken, User } from "../../database"
 import { logger } from "../../utils"
 import { Context } from "../context"
 import { NotFoundError, ServerError, TokenError } from "../errors"
-import { Resolvers, User as UserType } from "../types"
+import { Resolvers } from "../types"
 
 resolver.contextToOptions = { [EXPECTED_OPTIONS_KEY]: EXPECTED_OPTIONS_KEY }
 
@@ -22,17 +22,13 @@ const authResolver: Resolvers<Context> = {
     })
   },
   Mutation: {
-    login: async (
-      _parent,
-      { input: { identifier, password } },
-      { authenticate, login }
-    ): Promise<UserType> => {
+    login: async (_parent, { input: { identifier, password } }, { authenticate, login }) => {
       const { user } = await authenticate("graphql-local", { username: identifier, password })
       login(user)
 
       return user
     },
-    register: async (_parent, { input }, { authenticate, login }): Promise<UserType> => {
+    register: async (_parent, { input }, { authenticate, login }) => {
       await User.create(input)
 
       const { user } = await authenticate("graphql-local", {
@@ -44,16 +40,14 @@ const authResolver: Resolvers<Context> = {
 
       return user
     },
-    logout: async (_parent, _args, { logout }): Promise<boolean> => {
+    logout: async (_parent, _args, { logout }) => {
       try {
         logout()
-
-        return true
       } catch (e) {
         throw new ServerError()
       }
     },
-    forgotPassword: async (_parent, { email }, { mailer }): Promise<boolean> => {
+    forgotPassword: async (_parent, { email }, { mailer }) => {
       try {
         const user = await User.findOne({ where: { email } })
 
@@ -79,58 +73,51 @@ const authResolver: Resolvers<Context> = {
             template: mailer.constants.forgotPassword.template,
             context: {
               username: user.username,
-              resetLink: `${process.env.CLIENT_PATH}/forgot-password/${encodeURIComponent(token)}`
+              resetLink: `${process.env.CLIENT_PATH}/reset-password/${encodeURIComponent(token)}`
             }
           })
         }
-
-        return true
       } catch (e) {
         logger(e, "ERROR")
         throw new ServerError()
       }
     },
-    resetPassword: async (_parent, { token: encodedToken, newPassword }): Promise<boolean> => {
-      try {
-        const token = decodeURIComponent(encodedToken)
+    resetPassword: async (_parent, { token: encodedToken, newPassword }) => {
+      const token = decodeURIComponent(encodedToken)
 
-        const record = await ResetToken.findOne({
-          where: {
-            expirationDate: { [Op.gt]: fn("CURDATE") },
-            token,
-            isUsed: false
-          }
-        })
-
-        if (!record) {
-          throw new TokenError("Reset token is invalid or expired, please request a new one")
+      const record = await ResetToken.findOne({
+        where: {
+          expirationDate: { [Op.gt]: fn("CURDATE") },
+          token,
+          isUsed: false
         }
+      })
 
+      if (!record) {
+        throw new TokenError("Reset token is invalid or expired, please request a new one")
+      }
+
+      try {
         await ResetToken.update({ isUsed: true }, { where: { token } })
 
         await User.changePassword(newPassword, "email", record.email)
-
-        return true
       } catch (e) {
         throw new ServerError()
       }
     },
-    changePassword: async (_parent, { oldPassword, newPassword }, { me }): Promise<boolean> => {
+    changePassword: async (_parent, { oldPassword, newPassword }, { me }) => {
+      if (!me) throw new NotFoundError("User not found")
+
+      const user = await User.findByPk(me.id)
+      if (!user) throw new NotFoundError("User not found")
+
+      const isValid = await user.validatePassword(oldPassword)
+      if (!isValid) throw new ApolloError("Password invalid", "INVALID_PASSWORD")
+
       try {
-        if (!me) throw new NotFoundError("User not found")
-
-        const user = await User.findByPk(me.id)
-        if (!user) throw new NotFoundError("User not found")
-
-        const isValid = await user.validatePassword(oldPassword)
-        if (!isValid) throw new ApolloError("Password invalid", "INVALID_PASSWORD")
-
         await User.changePassword(newPassword, "id", user.id)
-
-        return true
       } catch (e) {
-        logger(e, "ERROR")
-        throw new ServerError("Internal Server Error")
+        throw new ServerError()
       }
     }
   }
