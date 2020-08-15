@@ -2,6 +2,9 @@ import { GraphQLDate, GraphQLDateTime, GraphQLTime } from "graphql-iso-date"
 
 import authResolver from "./auth"
 import boardResolver from "./board"
+import cardResolver from "./card"
+import checkListResolver from "./checklist"
+import listResolver from "./list"
 import tagResolver from "./tag"
 import taskResolver from "./task"
 import templateResolver from "./template"
@@ -19,6 +22,9 @@ export default [
   authResolver,
   templateResolver,
   boardResolver,
+  listResolver,
+  cardResolver,
+  checkListResolver,
   taskResolver,
   tagResolver
 ]

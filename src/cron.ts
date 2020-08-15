@@ -10,7 +10,7 @@ export default () => {
    * table in database every day at 00:00
    */
   cron.schedule("0 0 0 * * *", () => {
-    logger("Deleting obsolete `ResetTokens` rows", "CRON")
+    logger.cron("Deleting obsolete `ResetTokens` rows")
 
     ResetToken.destroy({
       where: {

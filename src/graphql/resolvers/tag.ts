@@ -1,24 +1,44 @@
 import { resolver } from "graphql-sequelize"
 
-import { Tag, Task } from "../../database"
+import { Tag } from "../../database"
 import { Context } from "../context"
+import { ServerError } from "../errors"
 import { Resolvers } from "../types"
 
 const tagResolver: Resolvers<Context> = {
   Query: {
     tag: resolver(Tag),
-    taskTags: resolver(Tag, {
-      before: (options, { taskId }) => {
-        options.include = [
-          {
-            model: Task,
-            where: { id: taskId }
-          }
-        ]
-        return options
+    tags: resolver(Tag),
+    tagsCard: resolver(Tag),
+    tagsBoard: resolver(Tag)
+  },
+  Mutation: {
+    addTag: async (_parent, { boardId, input }) => {
+      try {
+        const newTag = await Tag.create({ boardId, ...input })
+
+        return newTag
+      } catch (e) {
+        throw new ServerError(e.message)
       }
-    }),
-    tagTasks: resolver(Tag)
+    },
+    updateTag: async (_parent, { id, input }) => {
+      try {
+        await Tag.update(input, { where: { id } })
+
+        const updatedTag = await Tag.findByPk(id)
+        return updatedTag
+      } catch (e) {
+        throw new ServerError(e.message)
+      }
+    },
+    deleteTag: async (_parent, { id }) => {
+      try {
+        await Tag.destroy({ where: { id } })
+      } catch (e) {
+        throw new ServerError(e.message)
+      }
+    }
   }
 }
 

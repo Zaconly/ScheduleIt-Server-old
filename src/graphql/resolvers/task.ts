@@ -1,43 +1,51 @@
 import { resolver } from "graphql-sequelize"
 
 import { Task } from "../../database"
-import { logger } from "../../utils"
 import { Context } from "../context"
 import { ServerError } from "../errors"
 import { Resolvers } from "../types"
 
 const taskResolver: Resolvers<Context> = {
-  Task: {
-    tags: resolver(Task.associations.tags)
-  },
   Query: {
     task: resolver(Task),
-    boardTasks: resolver(Task),
-    userTasks: resolver(Task)
+    tasks: resolver(Task),
+    tasksCheckList: resolver(Task),
+    tasksBoard: resolver(Task)
   },
   Mutation: {
-    addTask: async (_parent, { boardId, input }) => {
-      const newTask = await Task.create({
-        boardId,
-        ...input
-      })
+    addTaskBoard: async (_parent, { boardId, input }) => {
+      try {
+        const newTask = await Task.create({ boardId, ...input })
 
-      return newTask
+        return newTask
+      } catch (e) {
+        throw new ServerError(e.message)
+      }
+    },
+    addTaskCheckList: async (_parent, { checkListId, input }) => {
+      try {
+        const newTask = await Task.create({ checkListId, ...input })
+
+        return newTask
+      } catch (e) {
+        throw new ServerError(e.message)
+      }
     },
     updateTask: async (_parent, { id, input }) => {
-      await Task.update(input, { where: { id } })
+      try {
+        await Task.update(input, { where: { id } })
 
-      const updatedTask = await Task.findByPk(id)
-      return updatedTask
+        const updatedTask = await Task.findByPk(id)
+        return updatedTask
+      } catch (e) {
+        throw new ServerError(e.message)
+      }
     },
     deleteTask: async (_parent, { id }) => {
       try {
         await Task.destroy({ where: { id } })
-
-        return true
       } catch (e) {
-        logger(e, "ERROR")
-        throw new ServerError()
+        throw new ServerError(e.message)
       }
     }
   }

@@ -13,9 +13,9 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify(error => {
   if (error) {
-    logger("Nodemailer: " + error.message, "ERROR")
+    logger.error("Nodemailer: " + error.message)
   } else {
-    logger("Nodemailer: Connected and ready")
+    logger.info("Nodemailer: Connected and ready")
   }
 })
 

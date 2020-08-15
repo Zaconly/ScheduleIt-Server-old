@@ -19,32 +19,69 @@ export type Scalars = {
 export type Query = {
   __typename?: "Query"
   _?: Maybe<Scalars["Boolean"]>
-  allBoards?: Maybe<Array<Board>>
-  allTemplates?: Maybe<Array<Template>>
-  allUsers?: Maybe<Array<User>>
-  authorTemplates?: Maybe<Array<Template>>
   board?: Maybe<Board>
-  boardTasks?: Maybe<Array<Task>>
+  boards?: Maybe<Array<Board>>
+  boardsMe?: Maybe<Array<Board>>
+  boardsUser?: Maybe<Array<Board>>
+  card?: Maybe<Card>
+  cards?: Maybe<Array<Card>>
+  cardsList?: Maybe<Array<Card>>
+  cardsTag?: Maybe<Array<Card>>
+  checkList?: Maybe<CheckList>
+  checkLists?: Maybe<Array<CheckList>>
+  checkListsCard?: Maybe<Array<CheckList>>
+  list?: Maybe<List>
+  lists?: Maybe<Array<List>>
+  listsBoard?: Maybe<Array<List>>
   me: User
   tag?: Maybe<Tag>
-  tagTasks?: Maybe<Array<Task>>
+  tags?: Maybe<Array<Tag>>
+  tagsBoard?: Maybe<Array<Tag>>
+  tagsCard?: Maybe<Array<Tag>>
   task?: Maybe<Task>
-  taskTags?: Maybe<Array<Tag>>
+  tasks?: Maybe<Array<Task>>
+  tasksBoard?: Maybe<Array<Task>>
+  tasksCheckList?: Maybe<Array<Task>>
   template?: Maybe<Template>
+  templates?: Maybe<Array<Template>>
+  templatesAuthor?: Maybe<Array<Template>>
   user?: Maybe<User>
-  userBoards?: Maybe<Array<Board>>
-  userTasks?: Maybe<Array<Task>>
-}
-
-export type QueryAuthorTemplatesArgs = {
-  authorId: Scalars["ID"]
+  users?: Maybe<Array<User>>
 }
 
 export type QueryBoardArgs = {
   id: Scalars["ID"]
 }
 
-export type QueryBoardTasksArgs = {
+export type QueryBoardsUserArgs = {
+  userId?: Maybe<Scalars["ID"]>
+}
+
+export type QueryCardArgs = {
+  id: Scalars["ID"]
+}
+
+export type QueryCardsListArgs = {
+  listId: Scalars["ID"]
+}
+
+export type QueryCardsTagArgs = {
+  tagId: Scalars["ID"]
+}
+
+export type QueryCheckListArgs = {
+  id: Scalars["ID"]
+}
+
+export type QueryCheckListsCardArgs = {
+  cardId: Scalars["ID"]
+}
+
+export type QueryListArgs = {
+  id: Scalars["ID"]
+}
+
+export type QueryListsBoardArgs = {
   boardId: Scalars["ID"]
 }
 
@@ -52,48 +89,63 @@ export type QueryTagArgs = {
   id: Scalars["ID"]
 }
 
-export type QueryTagTasksArgs = {
-  id: Scalars["ID"]
+export type QueryTagsBoardArgs = {
+  boardId: Scalars["ID"]
+}
+
+export type QueryTagsCardArgs = {
+  cardId: Scalars["ID"]
 }
 
 export type QueryTaskArgs = {
   id: Scalars["ID"]
 }
 
-export type QueryTaskTagsArgs = {
-  taskId: Scalars["ID"]
-}
-
 export type QueryTemplateArgs = {
   id: Scalars["ID"]
+}
+
+export type QueryTemplatesAuthorArgs = {
+  authorId: Scalars["ID"]
 }
 
 export type QueryUserArgs = {
   id: Scalars["ID"]
 }
 
-export type QueryUserBoardsArgs = {
-  userId?: Maybe<Scalars["ID"]>
-}
-
 export type Mutation = {
   __typename?: "Mutation"
   _?: Maybe<Scalars["Boolean"]>
   addBoard?: Maybe<Board>
-  addTask?: Maybe<Task>
+  addCard?: Maybe<Card>
+  addCheckList?: Maybe<CheckList>
+  addList?: Maybe<List>
+  addTag?: Maybe<Tag>
+  addTaskBoard?: Maybe<Task>
+  addTaskCheckList?: Maybe<Task>
   addTemplate?: Maybe<Template>
   addUser?: Maybe<User>
+  attachTag?: Maybe<Card>
   changePassword?: Maybe<Scalars["Void"]>
-  deleteBoard?: Maybe<Scalars["Boolean"]>
-  deleteTask?: Maybe<Scalars["Boolean"]>
-  deleteTemplate?: Maybe<Scalars["Boolean"]>
-  deleteUser?: Maybe<Scalars["Boolean"]>
+  deleteBoard?: Maybe<Scalars["Void"]>
+  deleteCard?: Maybe<Scalars["Void"]>
+  deleteCheckList?: Maybe<Scalars["Void"]>
+  deleteList?: Maybe<Scalars["Void"]>
+  deleteTag?: Maybe<Scalars["Void"]>
+  deleteTask?: Maybe<Scalars["Void"]>
+  deleteTemplate?: Maybe<Scalars["Void"]>
+  deleteUser?: Maybe<Scalars["Void"]>
+  detachTag?: Maybe<Card>
   forgotPassword?: Maybe<Scalars["Void"]>
   login: User
   logout?: Maybe<Scalars["Void"]>
   register: User
   resetPassword?: Maybe<Scalars["Void"]>
   updateBoard?: Maybe<Board>
+  updateCard?: Maybe<Card>
+  updateCheckList?: Maybe<CheckList>
+  updateList?: Maybe<List>
+  updateTag?: Maybe<Tag>
   updateTask?: Maybe<Task>
   updateTemplate?: Maybe<Template>
   updateUser?: Maybe<User>
@@ -103,8 +155,33 @@ export type MutationAddBoardArgs = {
   input: BoardInput
 }
 
-export type MutationAddTaskArgs = {
+export type MutationAddCardArgs = {
+  listId: Scalars["ID"]
+  input: CardInput
+}
+
+export type MutationAddCheckListArgs = {
+  cardId: Scalars["ID"]
+  input: CheckListInput
+}
+
+export type MutationAddListArgs = {
   boardId: Scalars["ID"]
+  input: ListInput
+}
+
+export type MutationAddTagArgs = {
+  boardId: Scalars["ID"]
+  input: TagInput
+}
+
+export type MutationAddTaskBoardArgs = {
+  boardId: Scalars["ID"]
+  input: TaskInput
+}
+
+export type MutationAddTaskCheckListArgs = {
+  checkListId: Scalars["ID"]
   input: TaskInput
 }
 
@@ -116,12 +193,33 @@ export type MutationAddUserArgs = {
   input: UserInput
 }
 
+export type MutationAttachTagArgs = {
+  cardId: Scalars["ID"]
+  tagId: Scalars["ID"]
+}
+
 export type MutationChangePasswordArgs = {
   oldPassword: Scalars["String"]
   newPassword: Scalars["String"]
 }
 
 export type MutationDeleteBoardArgs = {
+  id: Scalars["ID"]
+}
+
+export type MutationDeleteCardArgs = {
+  id: Scalars["ID"]
+}
+
+export type MutationDeleteCheckListArgs = {
+  id: Scalars["ID"]
+}
+
+export type MutationDeleteListArgs = {
+  id: Scalars["ID"]
+}
+
+export type MutationDeleteTagArgs = {
   id: Scalars["ID"]
 }
 
@@ -135,6 +233,11 @@ export type MutationDeleteTemplateArgs = {
 
 export type MutationDeleteUserArgs = {
   id: Scalars["ID"]
+}
+
+export type MutationDetachTagArgs = {
+  cardId: Scalars["ID"]
+  tagId: Scalars["ID"]
 }
 
 export type MutationForgotPasswordArgs = {
@@ -157,6 +260,26 @@ export type MutationResetPasswordArgs = {
 export type MutationUpdateBoardArgs = {
   id: Scalars["ID"]
   input: BoardInput
+}
+
+export type MutationUpdateCardArgs = {
+  id: Scalars["ID"]
+  input: CardInput
+}
+
+export type MutationUpdateCheckListArgs = {
+  id: Scalars["ID"]
+  input: CheckListInput
+}
+
+export type MutationUpdateListArgs = {
+  id: Scalars["ID"]
+  input: ListInput
+}
+
+export type MutationUpdateTagArgs = {
+  id: Scalars["ID"]
+  input: TagInput
 }
 
 export type MutationUpdateTaskArgs = {
@@ -186,9 +309,10 @@ export type RegisterInput = {
 }
 
 export type BoardInput = {
-  name: Scalars["String"]
-  icon: Scalars["String"]
-  isArchived: Scalars["Boolean"]
+  name?: Maybe<Scalars["String"]>
+  icon?: Maybe<Scalars["String"]>
+  isArchived?: Maybe<Scalars["Boolean"]>
+  order?: Maybe<Scalars["Int"]>
 }
 
 export type Board = {
@@ -197,8 +321,45 @@ export type Board = {
   name: Scalars["String"]
   template?: Maybe<Template>
   tasks?: Maybe<Array<Task>>
+  lists?: Maybe<Array<List>>
   icon?: Maybe<Scalars["String"]>
   isArchived: Scalars["Boolean"]
+  order: Scalars["Int"]
+  createdAt?: Maybe<Scalars["DateTime"]>
+  updatedAt?: Maybe<Scalars["DateTime"]>
+}
+
+export type CardInput = {
+  name?: Maybe<Scalars["String"]>
+  dueDate?: Maybe<Scalars["DateTime"]>
+  desc?: Maybe<Scalars["String"]>
+  order?: Maybe<Scalars["Int"]>
+}
+
+export type Card = {
+  __typename?: "Card"
+  id: Scalars["ID"]
+  name: Scalars["String"]
+  dueDate?: Maybe<Scalars["DateTime"]>
+  desc?: Maybe<Scalars["String"]>
+  order: Scalars["Int"]
+  checkLists?: Maybe<Array<CheckList>>
+  tags?: Maybe<Array<Tag>>
+  createdAt?: Maybe<Scalars["DateTime"]>
+  updatedAt?: Maybe<Scalars["DateTime"]>
+}
+
+export type CheckListInput = {
+  name?: Maybe<Scalars["String"]>
+  order?: Maybe<Scalars["Int"]>
+}
+
+export type CheckList = {
+  __typename?: "CheckList"
+  id: Scalars["ID"]
+  name: Scalars["String"]
+  order: Scalars["Int"]
+  tasks?: Maybe<Array<Task>>
   createdAt?: Maybe<Scalars["DateTime"]>
   updatedAt?: Maybe<Scalars["DateTime"]>
 }
@@ -208,11 +369,33 @@ export type Subscription = {
   _?: Maybe<Scalars["Boolean"]>
 }
 
+export type ListInput = {
+  name?: Maybe<Scalars["String"]>
+  order?: Maybe<Scalars["Int"]>
+}
+
+export type List = {
+  __typename?: "List"
+  id: Scalars["ID"]
+  name: Scalars["String"]
+  order: Scalars["Int"]
+  cards?: Maybe<Array<Card>>
+  createdAt?: Maybe<Scalars["DateTime"]>
+  updatedAt?: Maybe<Scalars["DateTime"]>
+}
+
+export type TagInput = {
+  name?: Maybe<Scalars["String"]>
+  color?: Maybe<Scalars["String"]>
+}
+
 export type Tag = {
   __typename?: "Tag"
   id: Scalars["ID"]
   name: Scalars["String"]
   color?: Maybe<Scalars["String"]>
+  createdAt?: Maybe<Scalars["DateTime"]>
+  updatedAt?: Maybe<Scalars["DateTime"]>
 }
 
 export type TaskInput = {
@@ -220,6 +403,7 @@ export type TaskInput = {
   isCompleted: Scalars["Boolean"]
   startDate?: Maybe<Scalars["DateTime"]>
   endDate?: Maybe<Scalars["DateTime"]>
+  order?: Maybe<Scalars["Int"]>
 }
 
 export type Task = {
@@ -229,8 +413,7 @@ export type Task = {
   isCompleted: Scalars["Boolean"]
   startDate?: Maybe<Scalars["DateTime"]>
   endDate?: Maybe<Scalars["DateTime"]>
-  board?: Maybe<Board>
-  tags?: Maybe<Array<Tag>>
+  order: Scalars["Int"]
   createdAt?: Maybe<Scalars["DateTime"]>
   updatedAt?: Maybe<Scalars["DateTime"]>
 }
@@ -243,6 +426,8 @@ export type Template = {
   __typename?: "Template"
   id: Scalars["ID"]
   name: Scalars["String"]
+  desc?: Maybe<Scalars["String"]>
+  type: Scalars["String"]
   author?: Maybe<User>
   createdAt?: Maybe<Scalars["DateTime"]>
   updatedAt?: Maybe<Scalars["DateTime"]>
@@ -270,7 +455,7 @@ export type User = {
   email: Scalars["String"]
   isActive: Scalars["Boolean"]
   role: Role
-  boards: Array<Maybe<Board>>
+  boards?: Maybe<Array<Board>>
   createdAt?: Maybe<Scalars["DateTime"]>
   updatedAt?: Maybe<Scalars["DateTime"]>
 }
@@ -378,12 +563,20 @@ export type ResolversTypes = ResolversObject<{
   LoginInput: LoginInput
   RegisterInput: RegisterInput
   BoardInput: BoardInput
+  Int: ResolverTypeWrapper<Scalars["Int"]>
   Board: ResolverTypeWrapper<Board>
+  CardInput: CardInput
+  Card: ResolverTypeWrapper<Card>
+  CheckListInput: CheckListInput
+  CheckList: ResolverTypeWrapper<CheckList>
   Subscription: ResolverTypeWrapper<{}>
   Date: ResolverTypeWrapper<Scalars["Date"]>
   Time: ResolverTypeWrapper<Scalars["Time"]>
   DateTime: ResolverTypeWrapper<Scalars["DateTime"]>
   Void: ResolverTypeWrapper<Scalars["Void"]>
+  ListInput: ListInput
+  List: ResolverTypeWrapper<List>
+  TagInput: TagInput
   Tag: ResolverTypeWrapper<Tag>
   TaskInput: TaskInput
   Task: ResolverTypeWrapper<Task>
@@ -405,12 +598,20 @@ export type ResolversParentTypes = ResolversObject<{
   LoginInput: LoginInput
   RegisterInput: RegisterInput
   BoardInput: BoardInput
+  Int: Scalars["Int"]
   Board: Board
+  CardInput: CardInput
+  Card: Card
+  CheckListInput: CheckListInput
+  CheckList: CheckList
   Subscription: {}
   Date: Scalars["Date"]
   Time: Scalars["Time"]
   DateTime: Scalars["DateTime"]
   Void: Scalars["Void"]
+  ListInput: ListInput
+  List: List
+  TagInput: TagInput
   Tag: Tag
   TaskInput: TaskInput
   Task: Task
@@ -426,26 +627,64 @@ export type QueryResolvers<
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
 > = ResolversObject<{
   _?: Resolver<Maybe<ResolversTypes["Boolean"]>, ParentType, ContextType>
-  allBoards?: Resolver<Maybe<Array<ResolversTypes["Board"]>>, ParentType, ContextType>
-  allTemplates?: Resolver<Maybe<Array<ResolversTypes["Template"]>>, ParentType, ContextType>
-  allUsers?: Resolver<Maybe<Array<ResolversTypes["User"]>>, ParentType, ContextType>
-  authorTemplates?: Resolver<
-    Maybe<Array<ResolversTypes["Template"]>>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryAuthorTemplatesArgs, "authorId">
-  >
   board?: Resolver<
     Maybe<ResolversTypes["Board"]>,
     ParentType,
     ContextType,
     RequireFields<QueryBoardArgs, "id">
   >
-  boardTasks?: Resolver<
-    Maybe<Array<ResolversTypes["Task"]>>,
+  boards?: Resolver<Maybe<Array<ResolversTypes["Board"]>>, ParentType, ContextType>
+  boardsMe?: Resolver<Maybe<Array<ResolversTypes["Board"]>>, ParentType, ContextType>
+  boardsUser?: Resolver<
+    Maybe<Array<ResolversTypes["Board"]>>,
     ParentType,
     ContextType,
-    RequireFields<QueryBoardTasksArgs, "boardId">
+    RequireFields<QueryBoardsUserArgs, never>
+  >
+  card?: Resolver<
+    Maybe<ResolversTypes["Card"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryCardArgs, "id">
+  >
+  cards?: Resolver<Maybe<Array<ResolversTypes["Card"]>>, ParentType, ContextType>
+  cardsList?: Resolver<
+    Maybe<Array<ResolversTypes["Card"]>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryCardsListArgs, "listId">
+  >
+  cardsTag?: Resolver<
+    Maybe<Array<ResolversTypes["Card"]>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryCardsTagArgs, "tagId">
+  >
+  checkList?: Resolver<
+    Maybe<ResolversTypes["CheckList"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryCheckListArgs, "id">
+  >
+  checkLists?: Resolver<Maybe<Array<ResolversTypes["CheckList"]>>, ParentType, ContextType>
+  checkListsCard?: Resolver<
+    Maybe<Array<ResolversTypes["CheckList"]>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryCheckListsCardArgs, "cardId">
+  >
+  list?: Resolver<
+    Maybe<ResolversTypes["List"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryListArgs, "id">
+  >
+  lists?: Resolver<Maybe<Array<ResolversTypes["List"]>>, ParentType, ContextType>
+  listsBoard?: Resolver<
+    Maybe<Array<ResolversTypes["List"]>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryListsBoardArgs, "boardId">
   >
   me?: Resolver<ResolversTypes["User"], ParentType, ContextType>
   tag?: Resolver<
@@ -454,11 +693,18 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryTagArgs, "id">
   >
-  tagTasks?: Resolver<
-    Maybe<Array<ResolversTypes["Task"]>>,
+  tags?: Resolver<Maybe<Array<ResolversTypes["Tag"]>>, ParentType, ContextType>
+  tagsBoard?: Resolver<
+    Maybe<Array<ResolversTypes["Tag"]>>,
     ParentType,
     ContextType,
-    RequireFields<QueryTagTasksArgs, "id">
+    RequireFields<QueryTagsBoardArgs, "boardId">
+  >
+  tagsCard?: Resolver<
+    Maybe<Array<ResolversTypes["Tag"]>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryTagsCardArgs, "cardId">
   >
   task?: Resolver<
     Maybe<ResolversTypes["Task"]>,
@@ -466,17 +712,21 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryTaskArgs, "id">
   >
-  taskTags?: Resolver<
-    Maybe<Array<ResolversTypes["Tag"]>>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryTaskTagsArgs, "taskId">
-  >
+  tasks?: Resolver<Maybe<Array<ResolversTypes["Task"]>>, ParentType, ContextType>
+  tasksBoard?: Resolver<Maybe<Array<ResolversTypes["Task"]>>, ParentType, ContextType>
+  tasksCheckList?: Resolver<Maybe<Array<ResolversTypes["Task"]>>, ParentType, ContextType>
   template?: Resolver<
     Maybe<ResolversTypes["Template"]>,
     ParentType,
     ContextType,
     RequireFields<QueryTemplateArgs, "id">
+  >
+  templates?: Resolver<Maybe<Array<ResolversTypes["Template"]>>, ParentType, ContextType>
+  templatesAuthor?: Resolver<
+    Maybe<Array<ResolversTypes["Template"]>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryTemplatesAuthorArgs, "authorId">
   >
   user?: Resolver<
     Maybe<ResolversTypes["User"]>,
@@ -484,13 +734,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryUserArgs, "id">
   >
-  userBoards?: Resolver<
-    Maybe<Array<ResolversTypes["Board"]>>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryUserBoardsArgs, never>
-  >
-  userTasks?: Resolver<Maybe<Array<ResolversTypes["Task"]>>, ParentType, ContextType>
+  users?: Resolver<Maybe<Array<ResolversTypes["User"]>>, ParentType, ContextType>
 }>
 
 export type MutationResolvers<
@@ -504,11 +748,41 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationAddBoardArgs, "input">
   >
-  addTask?: Resolver<
+  addCard?: Resolver<
+    Maybe<ResolversTypes["Card"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddCardArgs, "listId" | "input">
+  >
+  addCheckList?: Resolver<
+    Maybe<ResolversTypes["CheckList"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddCheckListArgs, "cardId" | "input">
+  >
+  addList?: Resolver<
+    Maybe<ResolversTypes["List"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddListArgs, "boardId" | "input">
+  >
+  addTag?: Resolver<
+    Maybe<ResolversTypes["Tag"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddTagArgs, "boardId" | "input">
+  >
+  addTaskBoard?: Resolver<
     Maybe<ResolversTypes["Task"]>,
     ParentType,
     ContextType,
-    RequireFields<MutationAddTaskArgs, "boardId" | "input">
+    RequireFields<MutationAddTaskBoardArgs, "boardId" | "input">
+  >
+  addTaskCheckList?: Resolver<
+    Maybe<ResolversTypes["Task"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddTaskCheckListArgs, "checkListId" | "input">
   >
   addTemplate?: Resolver<
     Maybe<ResolversTypes["Template"]>,
@@ -522,6 +796,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationAddUserArgs, "input">
   >
+  attachTag?: Resolver<
+    Maybe<ResolversTypes["Card"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationAttachTagArgs, "cardId" | "tagId">
+  >
   changePassword?: Resolver<
     Maybe<ResolversTypes["Void"]>,
     ParentType,
@@ -529,28 +809,58 @@ export type MutationResolvers<
     RequireFields<MutationChangePasswordArgs, "oldPassword" | "newPassword">
   >
   deleteBoard?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
+    Maybe<ResolversTypes["Void"]>,
     ParentType,
     ContextType,
     RequireFields<MutationDeleteBoardArgs, "id">
   >
+  deleteCard?: Resolver<
+    Maybe<ResolversTypes["Void"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteCardArgs, "id">
+  >
+  deleteCheckList?: Resolver<
+    Maybe<ResolversTypes["Void"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteCheckListArgs, "id">
+  >
+  deleteList?: Resolver<
+    Maybe<ResolversTypes["Void"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteListArgs, "id">
+  >
+  deleteTag?: Resolver<
+    Maybe<ResolversTypes["Void"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteTagArgs, "id">
+  >
   deleteTask?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
+    Maybe<ResolversTypes["Void"]>,
     ParentType,
     ContextType,
     RequireFields<MutationDeleteTaskArgs, "id">
   >
   deleteTemplate?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
+    Maybe<ResolversTypes["Void"]>,
     ParentType,
     ContextType,
     RequireFields<MutationDeleteTemplateArgs, "id">
   >
   deleteUser?: Resolver<
-    Maybe<ResolversTypes["Boolean"]>,
+    Maybe<ResolversTypes["Void"]>,
     ParentType,
     ContextType,
     RequireFields<MutationDeleteUserArgs, "id">
+  >
+  detachTag?: Resolver<
+    Maybe<ResolversTypes["Card"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDetachTagArgs, "cardId" | "tagId">
   >
   forgotPassword?: Resolver<
     Maybe<ResolversTypes["Void"]>,
@@ -583,6 +893,30 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUpdateBoardArgs, "id" | "input">
   >
+  updateCard?: Resolver<
+    Maybe<ResolversTypes["Card"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateCardArgs, "id" | "input">
+  >
+  updateCheckList?: Resolver<
+    Maybe<ResolversTypes["CheckList"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateCheckListArgs, "id" | "input">
+  >
+  updateList?: Resolver<
+    Maybe<ResolversTypes["List"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateListArgs, "id" | "input">
+  >
+  updateTag?: Resolver<
+    Maybe<ResolversTypes["Tag"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateTagArgs, "id" | "input">
+  >
   updateTask?: Resolver<
     Maybe<ResolversTypes["Task"]>,
     ParentType,
@@ -611,8 +945,39 @@ export type BoardResolvers<
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   template?: Resolver<Maybe<ResolversTypes["Template"]>, ParentType, ContextType>
   tasks?: Resolver<Maybe<Array<ResolversTypes["Task"]>>, ParentType, ContextType>
+  lists?: Resolver<Maybe<Array<ResolversTypes["List"]>>, ParentType, ContextType>
   icon?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
   isArchived?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>
+  order?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
+  createdAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
+  updatedAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>
+}>
+
+export type CardResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Card"] = ResolversParentTypes["Card"]
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  dueDate?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
+  desc?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  order?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
+  checkLists?: Resolver<Maybe<Array<ResolversTypes["CheckList"]>>, ParentType, ContextType>
+  tags?: Resolver<Maybe<Array<ResolversTypes["Tag"]>>, ParentType, ContextType>
+  createdAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
+  updatedAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>
+}>
+
+export type CheckListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["CheckList"] = ResolversParentTypes["CheckList"]
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  order?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
+  tasks?: Resolver<Maybe<Array<ResolversTypes["Task"]>>, ParentType, ContextType>
   createdAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   updatedAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
@@ -642,6 +1007,19 @@ export interface VoidScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: "Void"
 }
 
+export type ListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["List"] = ResolversParentTypes["List"]
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  order?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
+  cards?: Resolver<Maybe<Array<ResolversTypes["Card"]>>, ParentType, ContextType>
+  createdAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
+  updatedAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>
+}>
+
 export type TagResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Tag"] = ResolversParentTypes["Tag"]
@@ -649,6 +1027,8 @@ export type TagResolvers<
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   color?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  createdAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
+  updatedAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }>
 
@@ -661,8 +1041,7 @@ export type TaskResolvers<
   isCompleted?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>
   startDate?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   endDate?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
-  board?: Resolver<Maybe<ResolversTypes["Board"]>, ParentType, ContextType>
-  tags?: Resolver<Maybe<Array<ResolversTypes["Tag"]>>, ParentType, ContextType>
+  order?: Resolver<ResolversTypes["Int"], ParentType, ContextType>
   createdAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   updatedAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
@@ -674,6 +1053,8 @@ export type TemplateResolvers<
 > = ResolversObject<{
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>
   name?: Resolver<ResolversTypes["String"], ParentType, ContextType>
+  desc?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>
+  type?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   author?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>
   createdAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   updatedAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
@@ -689,7 +1070,7 @@ export type UserResolvers<
   email?: Resolver<ResolversTypes["String"], ParentType, ContextType>
   isActive?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>
   role?: Resolver<ResolversTypes["Role"], ParentType, ContextType>
-  boards?: Resolver<Array<Maybe<ResolversTypes["Board"]>>, ParentType, ContextType>
+  boards?: Resolver<Maybe<Array<ResolversTypes["Board"]>>, ParentType, ContextType>
   createdAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   updatedAt?: Resolver<Maybe<ResolversTypes["DateTime"]>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
@@ -699,11 +1080,14 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Query?: QueryResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
   Board?: BoardResolvers<ContextType>
+  Card?: CardResolvers<ContextType>
+  CheckList?: CheckListResolvers<ContextType>
   Subscription?: SubscriptionResolvers<ContextType>
   Date?: GraphQLScalarType
   Time?: GraphQLScalarType
   DateTime?: GraphQLScalarType
   Void?: GraphQLScalarType
+  List?: ListResolvers<ContextType>
   Tag?: TagResolvers<ContextType>
   Task?: TaskResolvers<ContextType>
   Template?: TemplateResolvers<ContextType>

@@ -1,8 +1,10 @@
 import {
   AllowNull,
+  BelongsTo,
   BelongsToMany,
   Column,
   Default,
+  ForeignKey,
   Length,
   Model,
   PrimaryKey,
@@ -10,8 +12,9 @@ import {
 } from "sequelize-typescript"
 import shortid from "shortid"
 
-import Task from "./Task"
-import TaskTag from "./TaskTag"
+import Board from "./Board"
+import Card from "./Card"
+import CardTag from "./CardTag"
 
 @Table
 class Tag extends Model {
@@ -29,8 +32,15 @@ class Tag extends Model {
   @Column
   color?: string
 
-  @BelongsToMany(() => Task, () => TaskTag)
-  tasks!: Task[]
+  @ForeignKey(() => Board)
+  @Column
+  boardId!: string
+
+  @BelongsTo(() => Board)
+  board!: Board
+
+  @BelongsToMany(() => Card, () => CardTag)
+  cards!: Card[]
 }
 
 export default Tag

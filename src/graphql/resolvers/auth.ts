@@ -5,7 +5,6 @@ import { resolver } from "graphql-sequelize"
 import { fn, Op } from "sequelize"
 
 import { ResetToken, User } from "../../database"
-import { logger } from "../../utils"
 import { Context } from "../context"
 import { NotFoundError, ServerError, TokenError } from "../errors"
 import { Resolvers } from "../types"
@@ -78,8 +77,7 @@ const authResolver: Resolvers<Context> = {
           })
         }
       } catch (e) {
-        logger(e, "ERROR")
-        throw new ServerError()
+        throw new ServerError(e.message)
       }
     },
     resetPassword: async (_parent, { token: encodedToken, newPassword }) => {
@@ -94,7 +92,7 @@ const authResolver: Resolvers<Context> = {
       })
 
       if (!record) {
-        throw new TokenError("Reset token is invalid or expired, please request a new one")
+        throw new TokenError("Reset token is invalid or expired, please request a new one.")
       }
 
       try {
@@ -102,22 +100,28 @@ const authResolver: Resolvers<Context> = {
 
         await User.changePassword(newPassword, "email", record.email)
       } catch (e) {
-        throw new ServerError()
+        throw new ServerError(e.message)
       }
     },
     changePassword: async (_parent, { oldPassword, newPassword }, { me }) => {
-      if (!me) throw new NotFoundError("User not found")
+      if (!me) throw new NotFoundError("User not found.")
 
       const user = await User.findByPk(me.id)
-      if (!user) throw new NotFoundError("User not found")
+      if (!user) throw new NotFoundError("User not found.")
 
       const isValid = await user.validatePassword(oldPassword)
-      if (!isValid) throw new ApolloError("Password invalid", "INVALID_PASSWORD")
+      if (!isValid) throw new ApolloError("Your current password is invalid.", "INVALID_PASSWORD")
+
+      if (oldPassword === newPassword)
+        throw new ApolloError(
+          "New password must be different than current password.",
+          "INVALID_PASSWORD"
+        )
 
       try {
         await User.changePassword(newPassword, "id", user.id)
       } catch (e) {
-        throw new ServerError()
+        throw new ServerError(e.message)
       }
     }
   }

@@ -2,6 +2,7 @@ import {
   AllowNull,
   BelongsTo,
   Column,
+  DataType,
   Default,
   ForeignKey,
   HasMany,
@@ -12,6 +13,7 @@ import {
 } from "sequelize-typescript"
 import shortid from "shortid"
 
+import List from "./List"
 import Task from "./Task"
 import Template from "./Template"
 import User from "./User"
@@ -23,7 +25,7 @@ class Board extends Model {
   @Column
   id!: string
 
-  @Length({ min: 2, max: 30 })
+  @Length({ min: 1, max: 30 })
   @AllowNull(false)
   @Column
   name!: string
@@ -42,12 +44,18 @@ class Board extends Model {
   @BelongsTo(() => User)
   user!: User
 
+  @Column({ type: DataType.SMALLINT })
+  order!: number
+
   @ForeignKey(() => Template)
   @Column
   templateId!: string
 
   @BelongsTo(() => Template)
   template!: Template
+
+  @HasMany(() => List)
+  lists!: List[]
 
   @HasMany(() => Task)
   tasks!: Task[]

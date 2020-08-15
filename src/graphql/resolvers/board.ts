@@ -1,40 +1,55 @@
 import { resolver } from "graphql-sequelize"
 
 import { Board } from "../../database"
-import { logger } from "../../utils"
+import { logger } from "../../utils/log/logger"
 import { Context } from "../context"
 import { ServerError } from "../errors"
 import { Resolvers } from "../types"
 
 const boardResolver: Resolvers<Context> = {
   Board: {
-    tasks: resolver(Board.associations.tasks)
+    tasks: resolver(Board.associations.tasks),
+    lists: resolver(Board.associations.lists)
   },
   Query: {
     board: resolver(Board),
-    userBoards: resolver(Board),
-    allBoards: resolver(Board)
+    boards: resolver(Board),
+    boardsUser: resolver(Board),
+    boardsMe: resolver(Board, {
+      before: (options, _args, { me }) => {
+        options.where = { userId: me.id }
+        return options
+      }
+    })
   },
   Mutation: {
     addBoard: async (_parent, { input }) => {
-      const newBoard = await Board.create(input)
+      try {
+        const newBoard = await Board.create(input)
 
-      return newBoard
+        return newBoard
+      } catch (e) {
+        logger.error(JSON.stringify(e))
+        throw new ServerError(e.message)
+      }
     },
     updateBoard: async (_parent, { id, input }) => {
-      await Board.update(input, { where: { id } })
+      try {
+        await Board.update(input, { where: { id } })
 
-      const updatedBoard = await Board.findByPk(id)
-      return updatedBoard
+        const updatedBoard = await Board.findByPk(id)
+        return updatedBoard
+      } catch (e) {
+        logger.error(JSON.stringify(e))
+        throw new ServerError(e.message)
+      }
     },
-    deleteBoard: async (_parent, { id }): Promise<boolean> => {
+    deleteBoard: async (_parent, { id }) => {
       try {
         await Board.destroy({ where: { id } })
-
-        return true
       } catch (e) {
-        logger(e, "ERROR")
-        throw new ServerError()
+        logger.error(JSON.stringify(e))
+        throw new ServerError(e.message)
       }
     }
   }

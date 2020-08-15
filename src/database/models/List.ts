@@ -9,43 +9,37 @@ import {
   Length,
   Model,
   PrimaryKey,
-  Table,
-  Unique
+  Table
 } from "sequelize-typescript"
 import shortid from "shortid"
 
 import Board from "./Board"
-import User from "./User"
+import Card from "./Card"
 
 @Table
-class Template extends Model {
+class List extends Model {
   @PrimaryKey
   @Default(() => shortid.generate())
   @Column
   id!: string
 
-  @Length({ min: 2, max: 30 })
-  @Unique
+  @Length({ min: 1, max: 30 })
   @AllowNull(false)
   @Column
   name!: string
 
-  @Column({ type: DataType.TEXT })
-  desc!: string
+  @Column({ type: DataType.SMALLINT })
+  order!: number
 
-  @Unique
+  @ForeignKey(() => Board)
   @Column
-  type!: string
+  boardId!: string
 
-  @ForeignKey(() => User)
-  @Column
-  authorId!: string
+  @BelongsTo(() => Board)
+  board!: Board
 
-  @BelongsTo(() => User)
-  author!: User
-
-  @HasMany(() => Board)
-  boards!: Board[]
+  @HasMany(() => Card)
+  cards!: Card[]
 }
 
-export default Template
+export default List

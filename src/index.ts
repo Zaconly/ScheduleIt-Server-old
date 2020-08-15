@@ -52,10 +52,10 @@ server.applyMiddleware({ app, cors: corsOptions })
 sequelize
   .sync({ force: false })
   .then(() => {
-    logger(`Sequelize: Connected to database '${process.env.DB_NAME}'`)
+    logger.info(`Sequelize: Connected to database '${process.env.DB_NAME}'`)
     app.listen({ port: PORT }, () => {
-      logger(`Server ready at http://localhost:${PORT}${server.graphqlPath}`)
+      logger.info(`Server ready at http://localhost:${PORT}${server.graphqlPath}`)
       cronScheduler()
     })
   })
-  .catch(err => logger(err, "ERROR"))
+  .catch(err => logger.error(err))

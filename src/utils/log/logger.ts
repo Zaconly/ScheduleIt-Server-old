@@ -1,21 +1,17 @@
 import c from "chalk"
 
-type LoggerType = "INFO" | "WARNING" | "ERROR" | "CRON"
+import { ServerError } from "../../graphql/errors"
 
-export const logger = (message: string, type?: LoggerType): void => {
-  const dateFormat = `[${new Date().toLocaleString()}] `
+const dateFormat = `[${new Date().toLocaleString()}]`
 
-  switch (type) {
-    case "WARNING":
-      console.warn(c.yellowBright(`WARN ${dateFormat}`) + message)
-      break
-    case "ERROR":
-      console.error(c.redBright(`ERROR ${dateFormat}`) + message)
-      break
-    case "CRON":
-      console.info(c.magentaBright(`CRON ${dateFormat}`) + message)
-      break
-    default:
-      console.info(c.blueBright(`INFO ${dateFormat}`) + message)
-  }
+export const logger = {
+  info: (message: string) => console.info(c.blueBright(`INFO ${dateFormat} `) + message),
+  warn: (message: string) => console.warn(c.yellowBright(`WARN ${dateFormat} `) + message),
+  error: (message: string) => console.error(c.redBright(`ERROR ${dateFormat} `) + message),
+  cron: (message: string) => console.info(c.magentaBright(`CRON ${dateFormat} `) + message)
+}
+
+export const ServerErrorLogger = (e: Error) => {
+  logger.error(JSON.stringify(e, null, 2))
+  throw new ServerError(e.message)
 }

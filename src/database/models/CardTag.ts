@@ -1,23 +1,23 @@
 import { Column, Default, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript"
 import shortid from "shortid"
 
+import Card from "./Card"
 import Tag from "./Tag"
-import Task from "./Task"
 
 @Table({ timestamps: false })
-class TaskTag extends Model {
+class CardTag extends Model {
   @PrimaryKey
   @Default(() => shortid.generate())
   @Column
   id!: string
 
-  @ForeignKey(() => Task)
+  @ForeignKey(() => Card)
   @Column
-  taskId!: string
+  cardId!: string
 
   @ForeignKey(() => Tag)
   @Column
   tagId!: string
 }
 
-export default TaskTag
+export default CardTag

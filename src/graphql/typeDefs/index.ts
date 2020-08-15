@@ -2,6 +2,9 @@ import { gql } from "apollo-server-express"
 
 import authSchema from "./auth"
 import boardSchema from "./board"
+import cardSchema from "./card"
+import checkListSchema from "./checklist"
+import listSchema from "./list"
 import tagSchema from "./tag"
 import taskSchema from "./task"
 import templateSchema from "./template"
@@ -32,6 +35,9 @@ export default [
   authSchema,
   templateSchema,
   boardSchema,
+  listSchema,
+  cardSchema,
+  checkListSchema,
   taskSchema,
   tagSchema
 ]

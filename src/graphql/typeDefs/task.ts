@@ -3,14 +3,16 @@ import { gql } from "apollo-server-express"
 const taskSchema = gql`
   extend type Query {
     task(id: ID!): Task
-    boardTasks(boardId: ID!): [Task!]
-    userTasks: [Task!]
+    tasks: [Task!]
+    tasksCheckList: [Task!]
+    tasksBoard: [Task!]
   }
 
   extend type Mutation {
-    addTask(boardId: ID!, input: TaskInput!): Task
+    addTaskBoard(boardId: ID!, input: TaskInput!): Task
+    addTaskCheckList(checkListId: ID!, input: TaskInput!): Task
     updateTask(id: ID!, input: TaskInput!): Task
-    deleteTask(id: ID!): Boolean
+    deleteTask(id: ID!): Void
   }
 
   input TaskInput {
@@ -18,6 +20,7 @@ const taskSchema = gql`
     isCompleted: Boolean!
     startDate: DateTime
     endDate: DateTime
+    order: Int
   }
 
   type Task {
@@ -26,8 +29,7 @@ const taskSchema = gql`
     isCompleted: Boolean!
     startDate: DateTime
     endDate: DateTime
-    board: Board
-    tags: [Tag!]
+    order: Int!
     createdAt: DateTime
     updatedAt: DateTime
   }

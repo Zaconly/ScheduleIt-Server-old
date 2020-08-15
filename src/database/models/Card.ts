@@ -1,10 +1,12 @@
 import {
   AllowNull,
   BelongsTo,
+  BelongsToMany,
   Column,
   DataType,
   Default,
   ForeignKey,
+  HasMany,
   Length,
   Model,
   PrimaryKey,
@@ -13,10 +15,13 @@ import {
 import shortid from "shortid"
 
 import Board from "./Board"
+import CardTag from "./CardTag"
 import CheckList from "./CheckList"
+import List from "./List"
+import Tag from "./Tag"
 
 @Table
-class Task extends Model {
+class Card extends Model {
   @PrimaryKey
   @Default(() => shortid.generate())
   @Column
@@ -27,26 +32,27 @@ class Task extends Model {
   @Column
   name!: string
 
-  @Default(false)
   @Column
-  isCompleted!: boolean
+  dueDate?: Date
+
+  @Column({ type: DataType.TEXT })
+  desc?: string
 
   @Column({ type: DataType.SMALLINT })
   order!: number
 
-  @ForeignKey(() => Board)
+  @ForeignKey(() => List)
   @Column
-  boardId?: string
+  listId!: string
 
-  @ForeignKey(() => CheckList)
-  @Column
-  checkListId?: string
+  @BelongsTo(() => List)
+  list!: Board
 
-  @BelongsTo(() => Board)
-  board?: Board
+  @HasMany(() => CheckList)
+  checkLists!: CheckList[]
 
-  @BelongsTo(() => CheckList)
-  checkList?: CheckList
+  @BelongsToMany(() => Tag, () => CardTag)
+  tags!: Array<Tag & { CardTag: CardTag }>
 }
 
-export default Task
+export default Card

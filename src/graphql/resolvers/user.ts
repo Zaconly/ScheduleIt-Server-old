@@ -1,7 +1,6 @@
 import { resolver } from "graphql-sequelize"
 
 import { User } from "../../database"
-import { logger } from "../../utils"
 import { Context } from "../context"
 import { ServerError } from "../errors"
 import { Resolvers } from "../types"
@@ -12,30 +11,35 @@ const userResolver: Resolvers<Context> = {
   },
   Query: {
     user: resolver(User),
-    allUsers: resolver(User)
+    users: resolver(User)
   },
   Mutation: {
     addUser: async (_parent, { input }) => {
-      const newUser = await User.create(input)
+      try {
+        const newUser = await User.create(input)
 
-      return newUser
+        return newUser
+      } catch (e) {
+        throw new ServerError(e.message)
+      }
     },
     updateUser: async (_parent, { id, input }) => {
-      if (input.username) {
-        await User.update({ username: input.username }, { where: { id } })
-      }
+      try {
+        if (input.username) {
+          await User.update({ username: input.username }, { where: { id } })
+        }
 
-      const updatedUser = await User.findByPk(id)
-      return updatedUser
+        const updatedUser = await User.findByPk(id)
+        return updatedUser
+      } catch (e) {
+        throw new ServerError(e.message)
+      }
     },
     deleteUser: async (_parent, { id }) => {
       try {
         await User.destroy({ where: { id } })
-
-        return true
       } catch (e) {
-        logger(e, "ERROR")
-        throw new ServerError()
+        throw new ServerError(e.message)
       }
     }
   }

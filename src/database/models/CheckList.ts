@@ -5,6 +5,7 @@ import {
   DataType,
   Default,
   ForeignKey,
+  HasMany,
   Length,
   Model,
   PrimaryKey,
@@ -12,11 +13,11 @@ import {
 } from "sequelize-typescript"
 import shortid from "shortid"
 
-import Board from "./Board"
-import CheckList from "./CheckList"
+import Card from "./Card"
+import Task from "./Task"
 
 @Table
-class Task extends Model {
+class CheckList extends Model {
   @PrimaryKey
   @Default(() => shortid.generate())
   @Column
@@ -27,26 +28,18 @@ class Task extends Model {
   @Column
   name!: string
 
-  @Default(false)
-  @Column
-  isCompleted!: boolean
-
   @Column({ type: DataType.SMALLINT })
   order!: number
 
-  @ForeignKey(() => Board)
+  @ForeignKey(() => Card)
   @Column
-  boardId?: string
+  cardId!: string
 
-  @ForeignKey(() => CheckList)
-  @Column
-  checkListId?: string
+  @BelongsTo(() => Card)
+  card!: Card
 
-  @BelongsTo(() => Board)
-  board?: Board
-
-  @BelongsTo(() => CheckList)
-  checkList?: CheckList
+  @HasMany(() => Task)
+  tasks!: Task[]
 }
 
-export default Task
+export default CheckList

@@ -10,11 +10,11 @@ const redis = new Redis({
 })
 
 redis.on("connect", () => {
-  logger("Redis: client connected")
+  logger.info("Redis: client connected")
 })
 
 redis.on("error", err => {
-  logger("Redis: " + err, "ERROR")
+  logger.error("Redis: " + err)
 })
 
 export default redis

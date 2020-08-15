@@ -3,13 +3,13 @@ import { gql } from "apollo-server-express"
 const userSchema = gql`
   extend type Query {
     user(id: ID!): User
-    allUsers: [User!]
+    users: [User!]
   }
 
   extend type Mutation {
     addUser(input: UserInput!): User
     updateUser(id: ID!, input: UpdateInput!): User
-    deleteUser(id: ID!): Boolean
+    deleteUser(id: ID!): Void
   }
 
   enum Role {
@@ -33,7 +33,7 @@ const userSchema = gql`
     email: String!
     isActive: Boolean!
     role: Role!
-    boards: [Board]!
+    boards: [Board!]
     createdAt: DateTime
     updatedAt: DateTime
   }
